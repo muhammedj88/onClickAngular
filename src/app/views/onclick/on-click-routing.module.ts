@@ -30,7 +30,7 @@ const routes: Routes = [
         path: 'project/:id',
         component: ProjectComponent,
         data: {
-          title: 'Project :id'
+          title: 'Project'
         }
       }
     ]

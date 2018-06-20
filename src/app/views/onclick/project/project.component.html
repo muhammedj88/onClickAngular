@@ -1,3 +1,21 @@
-<p>
-  project works!
-</p>
+<div class="row">
+  <div class="col-md-12">
+    <h1>project {{id}} works! {{x}}</h1>
+  </div>
+  <div class="col-md-12">
+    <div class="eventcontrol" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+      <div class="ec-items ec-draggable" style="top:0px;height:113px;">
+
+      </div>
+      <div #markers class="ec-markers ec-draggable" style="top:114px;height:31px;">
+        <div class="ec-ticks">
+          <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-tick" style="top: 1px; height: 80px;" [ngStyle]="{'left': l.left}"></div>
+        </div>
+        <div class="ec-labels">
+          <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-region-label" style="top: 130px;" [ngStyle]="{'left': l.left}">{{l.date}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="eventcontrol-target"></div>
+  </div>
+</div>

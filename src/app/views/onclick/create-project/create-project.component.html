@@ -1,3 +1,134 @@
-<p>
-  create-project works!
-</p>
+<form>
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-header">
+          <strong>Project</strong> Details </div>
+        <div class="card-body">
+          <div class="form-group has-success">
+            <label class="form-col-form-label" for="inputSuccess1">Project Name</label>
+            <input class="form-control" id="project_name" type="text">
+          </div>
+          <div class="form-group has-warning">
+            <label class="form-col-form-label" for="inputWarning1">Start Date</label>
+            <input #start_date class="form-control" id="start_date" type="date">
+          </div>
+          <div class="form-group has-danger">
+            <label class="form-col-form-label" for="inputError1">End Date</label>
+            <input #end_date class="form-control" id="end_date" type="date">
+          </div>
+          <div class="form-group has-danger">
+            <label class="form-col-form-label" for="inputError1">Type</label>
+            <select class="form-control" id="project_type" name="project_type" (change)="getTasks($event.target.value)">
+              <option value="Transformation" ng-reflect-value="Transformation">Transformation</option>
+              <option value="DevOps" ng-reflect-value="DevOps">DevOps</option>
+            </select>
+          </div>
+          <div class="form-group has-danger">
+              <label class="form-col-form-label" for="inputError1">Clients</label>
+              <select class="form-control" id="project_client" name="client">
+                <option *ngFor="let client of clients"
+                value="{{client.clientId}}"
+                ng-reflect-value="">
+                {{client.name}}
+              </option>
+
+              </select>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-header">
+          <strong>Included Systems</strong>
+        </div>
+        <div class="card-body">
+          <div class="form-group row">
+            <label class="form-col-form-label" for="inputError1">Systems</label>
+            <div class="form-control">
+              <div class="form-check">
+                <input class="form-check-input form-control-lg" id="checkbox1" type="checkbox" value="option1">
+                <label class="form-check-label" for="checkbox1"> SYSTEM 1 </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" id="checkbox2" type="checkbox" value="option1">
+                <label class="form-check-label" for="checkbox2"> SYSTEM 2 </label>
+              </div>
+              <div class="form-check checkbox">
+                <input class="form-check-input" id="checkbox3" type="checkbox" value="option1">
+                <label class="form-check-label" for="checkbox3"> SYSTEM 3 </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+          <div class="card-header">
+            <strong>Included Systems</strong>
+          </div>
+          <div class="card-body">
+            <div class="form-group row">
+                <button class="btn btn-lg btn-square btn-warning" type="button"
+                (click)="create(start_date.value,end_date.value)">
+                  Create </button>
+            </div>
+          </div>
+        </div>
+
+    </div>
+  </div>
+
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> Tasks Lists </div>
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Milestone</th>
+                  <th>Stakeholder</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let task of formTasks" >
+                  <td>{{task.description}}</td>
+                  <td>{{task.milestone.name}}</td>
+                  <td>{{task.stakeholder.name}}</td>
+                </tr>
+
+              </tbody>
+            </table>
+            <ul class="pagination">
+              <li class="page-item">
+                <a class="page-link" href="#">Prev</a>
+              </li>
+              <li class="page-item active">
+                <a class="page-link" href="#">1</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">2</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">3</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">4</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</form>
