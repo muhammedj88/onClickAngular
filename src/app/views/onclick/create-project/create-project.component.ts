@@ -75,28 +75,18 @@ export class CreateProjectComponent implements OnInit, AfterViewInit {
 
       this.formTasks.forEach(t => {
         const tp = {
-          'project': {
-            'client':  {
-              'address': 'a',
-              'clientId': 1,
-              'name': 'koko'
-            } as Client,
-            'endDate': '2019-01-12T02:00:00+02:00',
-            'name': 'project1',
-            'projectId': 1,
-            'startDate': '2018-02-02T02:00:00+02:00',
-            'type': '1'
-        } as Project,
+          'taskProjectId': 0,
+          'projectId': 20,
           'stakeholder': t.stakeholder,
           'status': 1,
           'task': t,
           'week': Math.ceil(
             (((t.milestone.percentage / 100) * (t.stagePercentage / 100)) +
-            (Number(startsMilestones[t.milestone.milestoneId - 1]) / 100 )) * weekNumber)
-        };
+            (Number(startsMilestones[t.milestone.milestoneId - 1]) / 100 )) * weekNumber),
+          };
 
         this.taskProjectService.addTaskProject(tp as TaskProject)
-          .subscribe(p => {});
+         .subscribe(p => {});
 
         console.log(t.taskId
         + '\t' +
