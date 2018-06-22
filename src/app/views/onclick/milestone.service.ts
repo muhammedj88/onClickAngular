@@ -13,12 +13,12 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-
-export class ClientService {
-  private clientstUrl = 'http://localhost:8080/ProjectOnKlick/rest/client';
+export class MilestoneService {
+  private milestoneUrl = 'http://localhost:8080/ProjectOnKlick/rest/milestone';
   constructor(private http: HttpClient) { }
 
-  getClients(): Observable<Client[]> {
-    return this.http.get<Client[]>( this.clientstUrl );
+  getMilestones(): Observable<Milestone[]> {
+    return this.http.get<Milestone[]>( this.milestoneUrl );
   }
 }
+

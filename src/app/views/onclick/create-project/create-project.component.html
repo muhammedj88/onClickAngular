@@ -7,7 +7,7 @@
         <div class="card-body">
           <div class="form-group has-success">
             <label class="form-col-form-label" for="inputSuccess1">Project Name</label>
-            <input class="form-control" id="project_name" type="text">
+            <input #project_name class="form-control" id="project_name" type="text">
           </div>
           <div class="form-group has-warning">
             <label class="form-col-form-label" for="inputWarning1">Start Date</label>
@@ -19,14 +19,15 @@
           </div>
           <div class="form-group has-danger">
             <label class="form-col-form-label" for="inputError1">Type</label>
-            <select class="form-control" id="project_type" name="project_type" (change)="getTasks($event.target.value)">
+            <select #project_type class="form-control" id="project_type" name="project_type"
+            (change)="getTasks($event.target.value)" (load)="getTasks($event.target.value)">
               <option value="Transformation" ng-reflect-value="Transformation">Transformation</option>
               <option value="DevOps" ng-reflect-value="DevOps">DevOps</option>
             </select>
           </div>
           <div class="form-group has-danger">
               <label class="form-col-form-label" for="inputError1">Clients</label>
-              <select class="form-control" id="project_client" name="client">
+              <select #project_client class="form-control" id="project_client" name="client">
                 <option *ngFor="let client of clients"
                 value="{{client.clientId}}"
                 ng-reflect-value="">
@@ -71,7 +72,7 @@
           <div class="card-body">
             <div class="form-group row">
                 <button class="btn btn-lg btn-square btn-warning" type="button"
-                (click)="create(start_date.value,end_date.value)">
+                (click)="createProject(project_name.value,start_date.value,end_date.value,project_type.value,project_client.value)">
                   Create </button>
             </div>
           </div>
@@ -98,9 +99,9 @@
               <tbody>
 
                 <tr *ngFor="let task of formTasks" >
-                  <td>{{task.description}}</td>
-                  <td>{{task.milestone.name}}</td>
-                  <td>{{task.stakeholder.name}}</td>
+                  <td>{{task?.description}}</td>
+                  <td>{{task.milestone?.name}}</td>
+                  <td>{{task.stakeholder?.name}}</td>
                 </tr>
 
               </tbody>

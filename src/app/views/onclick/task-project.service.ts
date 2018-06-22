@@ -14,11 +14,15 @@ const httpOptions = {
   providedIn: 'root'
 })
 
-export class ClientService {
-  private clientstUrl = 'http://localhost:8080/ProjectOnKlick/rest/client';
+export class TaskProjectService {
+  private projectUrl = 'http://localhost:8080/ProjectOnKlick/rest/taskProject';
   constructor(private http: HttpClient) { }
 
-  getClients(): Observable<Client[]> {
-    return this.http.get<Client[]>( this.clientstUrl );
+  getTaskProjects(): Observable<TaskProject[]> {
+    return this.http.get<TaskProject[]>( this.projectUrl );
+  }
+
+  addTaskProject (taskProject: TaskProject): Observable<TaskProject> {
+    return this.http.put<TaskProject>(this.projectUrl + '/add', taskProject, httpOptions);
   }
 }

@@ -21,4 +21,8 @@ export class ProjectService {
   getProjects(): Observable<Project[]> {
     return this.http.get<Project[]>( this.projectUrl );
   }
+
+  addProject (project: Project): Observable<Project> {
+    return this.http.put<Project>(this.projectUrl + '/add', project, httpOptions);
+  }
 }
