@@ -75,8 +75,7 @@ export class CreateProjectComponent implements OnInit, AfterViewInit {
 
       this.formTasks.forEach(t => {
         const tp = {
-          'taskProjectId': 0,
-          'projectId': 20,
+          'projectId': 26,
           'stakeholder': t.stakeholder,
           'status': 1,
           'task': t,
@@ -85,14 +84,15 @@ export class CreateProjectComponent implements OnInit, AfterViewInit {
             (Number(startsMilestones[t.milestone.milestoneId - 1]) / 100 )) * weekNumber),
           };
 
-        this.taskProjectService.addTaskProject(tp as TaskProject)
-         .subscribe(p => {});
+          console.log(tp.week);
 
-        console.log(t.taskId
+        // this.taskProjectService.addTaskProject(tp as TaskProject)
+        // .subscribe(p => {});
+        /*console.log(t.taskId
         + '\t' +
         Math.ceil(
         (((t.milestone.percentage / 100) * (t.stagePercentage / 100)) +
-        (Number(startsMilestones[t.milestone.milestoneId - 1]) / 100 )) * weekNumber) );
+        (Number(startsMilestones[t.milestone.milestoneId - 1]) / 100 )) * weekNumber) );*/
       });
     console.log('------------------------------------------------');
   }

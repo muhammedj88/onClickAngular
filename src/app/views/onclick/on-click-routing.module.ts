@@ -32,6 +32,13 @@ const routes: Routes = [
         data: {
           title: 'Project'
         }
+      },
+      {
+        path: 'projectBar/:id',
+        component: ProjectComponent,
+        data: {
+          title: 'ProjectBar'
+        }
       }
     ]
   }

@@ -21,17 +21,14 @@
 .eventcontrol .ec-dot {
   position: absolute;
   padding: 0;
-  width: 0px;
-  height: 0px;
-  border: 7px solid;
-  border-radius: 4px;
-  cursor:pointer;
-  background: #fff;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
   z-index: 1;
 }
 
-.eventcontrol .ec-markers .ec-ticks {
-}
+.eventcontrol .ec-markers .ec-ticks {}
 
 .eventcontrol .ec-markers .ec-ticks .ec-tick {
   position: absolute;
@@ -40,6 +37,7 @@
 }
 
 .eventcontrol .ec-markers .ec-labels {
+  height: 35;
 }
 
 .eventcontrol .ec-label {
@@ -62,16 +60,16 @@
 }
 
 .eventcontrol .ec-draggable {
-cursor:hand;
-cursor:grab;
-cursor:-moz-grab;
-cursor:-webkit-grab;
+  cursor: hand;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
 }
 
 .eventcontrol .ec-dragging {
-cursor:grabbing;
-cursor:-moz-grabbing;
-cursor:-webkit-grabbing;
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
 }
 
 .eventcontrol-target {
@@ -84,9 +82,145 @@ cursor:-webkit-grabbing;
   padding: 4px;
   overflow: hidden;
   text-align: center;
-  }
+}
 
-  .eventcontrol-target h2 {
+.eventcontrol-target h2 {
   margin: 0;
   font-size: 48px;
-  }
+}
+
+////////////////////////////////////////////////////////
+.gtask0 {
+  background-image: linear-gradient(0deg, transparent 50%, White 50%), linear-gradient(0deg, White 50%, transparent 50%);
+  color: lightgreen;
+}
+
+.gtask10 {
+  background-image: linear-gradient(126deg, transparent 50%, White 50%), linear-gradient(90deg, White 50%, transparent 50%);
+  color: lightgreen;
+}
+
+.gtask15 {
+  background-image: linear-gradient(180deg, transparent 50%, white 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: lightgreen;
+}
+
+.gtask20 {
+  background-image: linear-gradient(216deg, transparent 50%, white 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: lightgreen;
+}
+
+.gtask30 {
+  background-image: linear-gradient(90deg, white 50%, transparent 50%);
+  color: lightgreen;
+}
+
+.gtask40 {
+  background-image: linear-gradient(126deg, transparent 50%, green 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: lightgreen;
+}
+
+.gtask45 {
+  background-image: linear-gradient(180deg, transparent 50%, green 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: lightgreen;
+}
+
+.gtask50 {
+  background-image: linear-gradient(216deg, transparent 50%, green 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: lightgreen;
+}
+
+.gtaskonehundred {
+  background-image: none;
+  color: lightgreen;
+}
+
+.otask0 {
+  background-image: linear-gradient(0deg, transparent 50%, White 50%), linear-gradient(0deg, White 50%, transparent 50%);
+  color: darkorange;
+}
+
+.otask10 {
+  background-image: linear-gradient(126deg, transparent 50%, White 50%), linear-gradient(90deg, White 50%, transparent 50%);
+  color: darkorange;
+}
+
+.otask15 {
+  background-image: linear-gradient(180deg, transparent 50%, white 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: darkorange;
+}
+
+.otask20 {
+  background-image: linear-gradient(216deg, transparent 50%, white 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: darkorange;
+}
+
+.otask30 {
+  background-image: linear-gradient(90deg, white 50%, transparent 50%);
+  color: darkorange;
+}
+
+.otask40 {
+  background-image: linear-gradient(126deg, transparent 50%, orange 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: darkorange;
+}
+
+.otask45 {
+  background-image: linear-gradient(180deg, transparent 50%, orange 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: darkorange;
+}
+
+.otask50 {
+  background-image: linear-gradient(216deg, transparent 50%, orange 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: darkorange;
+}
+
+.otaskonehundred {
+  background-image: none;
+  color: darkorange;
+}
+
+.rtask0 {
+  background-image: linear-gradient(0deg, transparent 50%, White 50%), linear-gradient(0deg, White 50%, transparent 50%);
+  color: red;
+}
+
+.rtask10 {
+  background-image: linear-gradient(126deg, transparent 50%, White 50%), linear-gradient(90deg, White 50%, transparent 50%);
+  color: red;
+}
+
+.rtask15 {
+  background-image: linear-gradient(180deg, transparent 50%, white 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: red;
+}
+
+.rtask20 {
+  background-image: linear-gradient(216deg, transparent 50%, white 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: red;
+}
+
+.rtask30 {
+  background-image: linear-gradient(90deg, white 50%, transparent 50%);
+  color: red;
+}
+
+.rtask40 {
+  background-image: linear-gradient(126deg, transparent 50%, red 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: lightgray;
+}
+
+.rtask45 {
+  background-image: linear-gradient(180deg, transparent 50%, red 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: lightgray;
+}
+
+.rtask50 {
+  background-image: linear-gradient(216deg, transparent 50%, red 50%), linear-gradient(90deg, white 50%, transparent 50%);
+  color: lightgray;
+}
+
+.rtaskonehundred {
+  background-image: none;
+  color: lightgray;
+}

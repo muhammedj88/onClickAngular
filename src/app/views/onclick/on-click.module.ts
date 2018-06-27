@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ProjectComponent } from './project/project.component';
@@ -12,7 +14,9 @@ import { OnClickRoutingModule } from './on-click-routing.module';
   imports: [
     CommonModule,
     HttpClientModule,
-    OnClickRoutingModule
+    OnClickRoutingModule,
+    ProgressbarModule.forRoot(),
+    PopoverModule.forRoot()
   ],
   declarations: [
     CreateProjectComponent,

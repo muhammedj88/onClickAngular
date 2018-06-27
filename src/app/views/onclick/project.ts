@@ -5,4 +5,5 @@ interface Project {
   endDate: any;
   type: string;
   client: Client;
+  taskProjects: TaskProject[];
 }

@@ -1,21 +1,84 @@
 <div class="row">
   <div class="col-md-12">
-    <h1>project {{id}} works! {{x}}</h1>
-  </div>
-  <div class="col-md-12">
-    <div class="eventcontrol" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-      <div class="ec-items ec-draggable" style="top:0px;height:113px;">
-
+    <div class="card">
+      <div class="card-header">
+        project: <b>{{project?.name}}</b>
+        <span class="badge badge-pill badge-secondary  float-right">{{project?.taskProjects.length}}</span>
+        <span *ngIf="(summry?.done < 0.6); else sWarning" class="badge badge-pill badge-danger float-right">{{summry?.done * 100}}%</span>
+        <span #sWarning *ngIf="(summry?.done < 0.9 && summry?.done >= 0.6); else sSuccess" class="badge badge-pill badge-warning float-right">{{summry?.done * 100}}%</span>
+        <span #sSuccess *ngIf="(summry?.done > 0.9)" class="badge badge-pill badge-success float-right">{{summry?.done * 100}}%</span>
       </div>
-      <div #markers class="ec-markers ec-draggable" style="top:114px;height:31px;">
-        <div class="ec-ticks">
-          <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-tick" style="top: 1px; height: 80px;" [ngStyle]="{'left': l.left}"></div>
+      <div class="card-body">
+        <div>{{project?.startDate | date:'dd-MM-yyyy'}} <span class="float-right">{{project?.endDate | date:'dd-MM-yyyy'}}</span></div>
+        <div class="eventcontrol" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+          <div class="ec-items ec-draggable" style="top:0px;" [ngStyle]="{'height':height+'px'}">
+            <div *ngFor="let task of tasks" class="ec-dot" [ngClass]="task.done" [ngStyle]="{  'top': ((height - task.top) - 25)+'px' ,
+                  'left': task.left +'px' ,
+                  'text-align':'center' ,
+                  'vertical-align':'middle' ,
+                  'border': '1px solid '+task.color ,
+                  'cursor':pointer ,
+                  'background-color': task.color
+                }" (click)="taskClick(task)" popover="{{task.stakholderName}} - {{task.num}} tasks" triggers="mouseenter:mouseleave">
+
+              <b>{{task.stakholderName[0] | uppercase}}{{task.stakholderName[1] | uppercase}}</b>
+            </div>
+          </div>
+          <div #markers class="ec-markers ec-draggable" style="top:114px;height:20px;">
+            <div class="ec-ticks">
+              <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-tick" style="top:0px;" [ngStyle]="{ 'left': l.left+'px' , 'height': height - 10+'px'}"><div *ngIf="l.today" style="border-left: 2px solid red" [ngStyle]="{'height': height + 20+'px'}"></div></div>
+            </div>
+            <div class="ec-labels">
+              <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-region-label" [ngStyle]="{ 'left': l.left+'px' , 'top' : tikheight+'px'}">{{l?.date}}</div>
+              <progressbar class="progress" [value]="getMilestonesPer()" [max]="100" style="position: absolute; top: 0px; opacity: 0.3;"
+                [ngStyle]="{ 'height' : height + 20 +'px'}"></progressbar>
+            </div>
+          </div>
         </div>
-        <div class="ec-labels">
-          <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-region-label" style="top: 130px;" [ngStyle]="{'left': l.left}">{{l.date}}</div>
+
+        <!--<div class="eventcontrol-target">
+        <div *ngIf="hoverTask">
+          <h1>{{hoverTask.stakholderName}} - {{hoverTask.num}}</h1>
         </div>
+      </div>-->
       </div>
     </div>
-    <div class="eventcontrol-target"></div>
+  </div>
+</div>
+
+
+<div *ngIf="selectedTasks" class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <i class="fa fa-align-justify">
+        </i>
+        {{selectedTasks[0].stakeholder.name}} have
+        <b>{{selectedTasks.length}}</b>
+        task in the week #{{selectedTasks[0].week}}
+      </div>
+      <div class="card-body">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let task of selectedTasks">
+              <td>{{task.task.description}}</td>
+              <td>
+                <label class="switch switch-label switch-success">
+                  <input *ngIf="task.status === 1" class="switch-input" type="checkbox" (change)="updateTask(task)">
+                  <input *ngIf="task.status === 2" checked class="switch-input" type="checkbox" (change)="updateTask2(task)">
+                  <span class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                </label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>

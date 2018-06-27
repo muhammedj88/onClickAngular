@@ -22,7 +22,11 @@ export class TaskProjectService {
     return this.http.get<TaskProject[]>( this.projectUrl );
   }
 
-  addTaskProject (taskProject: TaskProject): Observable<TaskProject> {
+  addTaskProject (taskProject): Observable<any> {
     return this.http.put<TaskProject>(this.projectUrl + '/add', taskProject, httpOptions);
+  }
+
+  updateTaskProject (taskProject): Observable<any> {
+    return this.http.put<TaskProject>(this.projectUrl, taskProject, httpOptions);
   }
 }

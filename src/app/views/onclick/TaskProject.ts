@@ -1,8 +1,8 @@
 interface TaskProject {
-  taskProjectId: number;
-  projectId: number;
-  status: number;
-  week: number;
-  task: Tasks;
   stakeholder: Stakeholder;
+  status: number;
+  task: Tasks;
+  taskProjectId: number;
+  week: number;
+  project: Project;
 }

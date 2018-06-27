@@ -22,7 +22,11 @@ export class ProjectService {
     return this.http.get<Project[]>( this.projectUrl );
   }
 
+  getProject(id: number): Observable<Project> {
+    return this.http.get<Project>( `${this.projectUrl}/${id}` );
+  }
+
   addProject (project: Project): Observable<Project> {
-    return this.http.put<Project>(this.projectUrl + '/add', project, httpOptions);
+    return this.http.put<Project>( `${this.projectUrl}/add`, project, httpOptions);
   }
 }
