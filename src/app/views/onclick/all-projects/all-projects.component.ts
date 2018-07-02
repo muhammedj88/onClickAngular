@@ -13,6 +13,7 @@ export class AllProjectsComponent implements OnInit {
 
   ngOnInit() {
     this.projectService.getProjects().subscribe(p => {
+      this.projects = null;
       this.projects = p;
     });
   }

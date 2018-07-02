@@ -9,6 +9,7 @@ import { ProjectComponent } from './project/project.component';
 import { AllProjectsComponent } from './all-projects/all-projects.component';
 
 import { OnClickRoutingModule } from './on-click-routing.module';
+import { ProjectBarComponent } from './project-bar/project-bar.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { OnClickRoutingModule } from './on-click-routing.module';
   declarations: [
     CreateProjectComponent,
     ProjectComponent,
-    AllProjectsComponent
+    AllProjectsComponent,
+    ProjectBarComponent
   ]
 })
 export class OnClickModule { }

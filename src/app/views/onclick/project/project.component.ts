@@ -65,6 +65,7 @@ export class ProjectComponent implements OnInit, AfterViewInit {
     const id =   +this.route.snapshot.paramMap.get('id');
     this.projectService.getProject(id)
               .subscribe(p => {
+                this.project = null;
                 this.project = p;
                 this.getTicks();
                 this.getTasks();
@@ -167,9 +168,6 @@ export class ProjectComponent implements OnInit, AfterViewInit {
       default:
       task.done =  color + 'taskonehundred';
        }
-
-
-
   }
 
   taskClick(task: MyTask) {
@@ -189,7 +187,7 @@ export class ProjectComponent implements OnInit, AfterViewInit {
   }
 
   getCurrentWeek () {
-    return  this.calculateWeeksBetween(new Date(this.project.startDate), new Date(2018, 7, 15));
+    return  this.calculateWeeksBetween(new Date(this.project.startDate), new Date());
   }
 
   getSummary () {
