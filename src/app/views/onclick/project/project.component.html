@@ -10,9 +10,9 @@
       </div>
       <div class="card-body">
         <div>{{project?.startDate | date:'dd-MM-yyyy'}} <span class="float-right">{{project?.endDate | date:'dd-MM-yyyy'}}</span></div>
-        <div class="eventcontrol" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-          <div class="ec-items ec-draggable" style="top:0px;" [ngStyle]="{'height':height+'px'}">
-            <div *ngFor="let task of tasks" class="ec-dot" [ngClass]="task.done" [ngStyle]="{  'top': ((height - task.top) - 25)+'px' ,
+        <div #target (drag)="scroll(target)" class="eventcontrol" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+          <div class="ec-items ec-draggable" style="top:0px;" [ngStyle]="{'height':height+'px' , 'width' : ((weekNumber + 1)  *  (40)) + 'px'}">
+            <div *ngFor="let task of tasks" class="ec-dot" [ngClass]="task.done" [ngStyle]="{  'top': ((height - task.top) - 36)+'px' ,
                   'left': task.left +'px' ,
                   'text-align':'center' ,
                   'vertical-align':'middle' ,
@@ -20,19 +20,32 @@
                   'cursor':pointer ,
                   'background-color': task.color
                 }" (click)="taskClick(task)" popover="{{task.stakholderName}} - {{task.num}} tasks" triggers="mouseenter:mouseleave">
-
-              <b>{{task.stakholderName[0] | uppercase}}{{task.stakholderName[1] | uppercase}}</b>
-            </div>
+                <div [ngSwitch]="task.stakeholderId"  style="font-size: 26px;">
+                    <i *ngSwitchCase="1" class="icon-boy-smiling"></i>
+                    <i *ngSwitchCase="2" class="icon-fat-boy-smiling"></i>
+                    <i *ngSwitchCase="3" class="icon-girl-embarrased"></i>
+                    <i *ngSwitchCase="4" class="icon-hipster-smiling"></i>
+                    <i *ngSwitchCase="5" class="icon-man-with-moustache-smiling"></i>
+                    <i *ngSwitchCase="6" class="icon-smiling-baby"></i>
+                    <i *ngSwitchCase="7" class="icon-smiling-girl"></i>
+                    <i *ngSwitchCase="8" class="icon-naughty-girl"></i>
+                    <i *ngSwitchCase="9" class="icon-philosophizing-boy"></i>
+                    <i *ngSwitchCase="10" class="icon-happy-woman"></i>
+                </div>
+              </div>
           </div>
-          <div #markers class="ec-markers ec-draggable" style="top:114px;height:20px;">
+          <div #markers class="ec-markers ec-draggable" style="top:114;height:40px;">
             <div class="ec-ticks">
-              <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-tick" style="top:0px;" [ngStyle]="{ 'left': l.left+'px' , 'height': height - 10+'px'}"><div *ngIf="l.today" style="border-left: 2px solid red" [ngStyle]="{'height': height + 20+'px'}"></div></div>
+              <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-tick" style="top:0px;"
+              [ngStyle]="{ 'left': l.left+'px' , 'height': height - 10+'px'}"><div *ngIf="l.today" style="border-left: 2px solid red" [ngStyle]="{'height': height + 20 +'px'}"></div></div>
             </div>
             <div class="ec-labels">
-              <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-region-label" [ngStyle]="{ 'left': l.left+'px' , 'top' : tikheight+'px'}">{{l?.date}}</div>
-              <progressbar class="progress" [value]="getMilestonesPer()" [max]="100" style="position: absolute; top: 0px; opacity: 0.3;"
-                [ngStyle]="{ 'height' : height + 20 +'px'}"></progressbar>
+              <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-region-label"
+              [ngStyle]="{ 'left': (l.left + tasckheight / 2)+'px' , 'top' : tikheight+'px'}">{{l?.date}}</div>
+
             </div>
+            <progressbar class="progress" [value]="getMilestonesPer()" [max]="100" style="position: absolute;height: 20px; color: black;"
+            [ngStyle]="{'top' : tikheight + 20 +'px' , 'width' : ((weekNumber + 1)  * (40)) + 'px'}"></progressbar>
           </div>
         </div>
         <!--<app-project-bar projectid="{{project?.projectId}}"></app-project-bar>
@@ -71,8 +84,9 @@
               <td>
                 <label class="switch switch-label switch-success">
                   <input *ngIf="task.status === 1" class="switch-input" type="checkbox" (change)="updateTask(task)">
-                  <input *ngIf="task.status === 2" checked class="switch-input" type="checkbox" (change)="updateTask2(task)">
-                  <span class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                  <input *ngIf="task.status === 2" checked class="switch-input" type="checkbox" (change)="updateTask(task)">
+                  <span *ngIf="!updating"  class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                  <i *ngIf="updating" class="fa fa-circle-o-notch fa-lg mt-4 fa-spin"></i>
                 </label>
               </td>
             </tr>

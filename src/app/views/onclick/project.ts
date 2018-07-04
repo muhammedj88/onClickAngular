@@ -6,4 +6,5 @@ interface Project {
   type: string;
   client: Client;
   taskProjects: TaskProject[];
+  milestoneProjects: MilestoneProject[];
 }

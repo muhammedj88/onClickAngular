@@ -1,3 +1,4 @@
+@import url(faces/styles.css);
 .eventcontrol {
   /*background: #eee; */
   color: #444;
@@ -7,6 +8,10 @@
   overflow: hidden;
   position: relative;
   width: 100%;
+
+  overflow-x: scroll;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .eventcontrol .ec-items {
@@ -21,8 +26,8 @@
 .eventcontrol .ec-dot {
   position: absolute;
   padding: 0;
-  width: 25px;
-  height: 25px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   cursor: pointer;
   z-index: 1;
@@ -47,8 +52,6 @@
   text-align: left;
   white-space: nowrap;
   color: #777;
-  cursor: pointer;
-
 }
 
 .eventcontrol .ec-region-label {
@@ -59,6 +62,7 @@
   text-align: left;
   white-space: nowrap;
   color: #999;
+  cursor: pointer;
 }
 
 .eventcontrol .ec-draggable {

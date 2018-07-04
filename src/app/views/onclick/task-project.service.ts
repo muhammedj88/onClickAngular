@@ -27,6 +27,6 @@ export class TaskProjectService {
   }
 
   updateTaskProject (taskProject): Observable<any> {
-    return this.http.put<TaskProject>(this.projectUrl, taskProject, httpOptions);
+    return this.http.put<TaskProject>(this.projectUrl + '/status/' + taskProject, null);
   }
 }

@@ -23,7 +23,7 @@ import { ProjectBarComponent } from './project-bar/project-bar.component';
     CreateProjectComponent,
     ProjectComponent,
     AllProjectsComponent,
-    ProjectBarComponent
+    ProjectBarComponent,
   ]
 })
 export class OnClickModule { }

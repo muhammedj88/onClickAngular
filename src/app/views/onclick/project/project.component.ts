@@ -25,9 +25,12 @@ export class ProjectComponent implements OnInit, AfterViewInit {
   markers: ElementRef;
 
   public height;
-  public tasckheight = 26;
+  public tasckheight = 37;
   public tikheight;
   public summry: any;
+  public weekNumber = 0;
+
+  public updating: Boolean;
 
   d: Date;
   constructor(private route: ActivatedRoute,
@@ -42,6 +45,7 @@ export class ProjectComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
+    this.updating = false;
     this.getMilestones();
   }
 
@@ -79,13 +83,12 @@ export class ProjectComponent implements OnInit, AfterViewInit {
 
   getTicks() {
     const total = this.markers.nativeElement.offsetWidth;
-    const weekNumber =
+    this.weekNumber =
       this.calculateWeeksBetween(new Date(this.project.startDate), new Date(this.project.endDate));
-    console.log(weekNumber);
-    this.t = new Array(weekNumber);
+    this.t = new Array(this.weekNumber);
     this.d = this.project.startDate;
-    for (let i = 0; i <= weekNumber; i++) {
-      this.t[i] = { 'left' : (i * (total / weekNumber)) ,
+    for (let i = 0; i <= this.weekNumber; i++) {
+      this.t[i] = { 'left' : (i * (this.tasckheight + 3)) ,
                     'date' : i + 1 ,
                     'today' : i === this.getCurrentWeek()};
     }
@@ -102,7 +105,7 @@ export class ProjectComponent implements OnInit, AfterViewInit {
           week : t.week,
           num : 1,
           done: 'task0',
-          left: this.t[t.week - 1].left + 2,
+          left: this.t[t.week - 1].left + 3,
           top : 0,
           color : 'green'
         });
@@ -146,8 +149,7 @@ export class ProjectComponent implements OnInit, AfterViewInit {
   getTaskStyle(task: MyTask, color: string) {
     const val = this.project.taskProjects.filter(
       t => (t.stakeholder.stakeholderId === task.stakeholderId) &&
-      (t.status === 2)).length / task.num;
-      console.log(val);
+      (t.status === 2) && (t.week === task.week)).length / task.num;
     switch (true) {
       case (val < 0.13) :
       task.done = color + 'task0'; break;
@@ -178,12 +180,16 @@ export class ProjectComponent implements OnInit, AfterViewInit {
   }
 
   updateTask(task: TaskProject) {
-    task.status = 2;
-    console.log(task);
-    this.taskProjectService.updateTaskProject(task).subscribe(t => {});
-  }
-
-  updateTask2(task: TaskProject) {
+    this.updating = true;
+    this.taskProjectService.updateTaskProject(task.taskProjectId).subscribe(t => {
+      if (task.status === 1) {
+        task.status = 2;
+      } else {
+        task.status = 1;
+      }
+    this.updating = false;
+    this.getTasks();
+    });
   }
 
   getCurrentWeek () {
@@ -198,6 +204,11 @@ export class ProjectComponent implements OnInit, AfterViewInit {
         .filter(t => (t.week <= this.getCurrentWeek())).length
     };
   }
+
+  scroll(el) {
+    el.scrollIntoView();
+}
+
 }
 
 interface MyTask {
