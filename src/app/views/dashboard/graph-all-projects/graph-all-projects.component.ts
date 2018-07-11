@@ -16,6 +16,9 @@ import * as svgPanZoom from 'svg-pan-zoom';
 export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
   @ViewChild('graphviewer') graphContainer: ElementRef;
   public projects: Project[];
+  public milestones: Milestone[];
+  projectByClient: Project [];
+  public client:string;
 
   private timeline: TimelineGraph;
 
@@ -23,38 +26,61 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
   private selectedProject;
   private selectedTask;
 
-  constructor( private projectService: ProjectService, private router: Router) {
+  constructor( private projectService: ProjectService, private router: Router, private milestonesService: MilestoneService) {
     }
 
     ngOnInit() {
       this.projectService.getProjects().subscribe(p => {
         this.projects = p;
+        this.projectByClient = p;
 
-      });
-    }
-
-  ngAfterViewInit() {
-    this.timeline = new TimelineGraph(this.graphContainer.nativeElement);
-    this.timeline.drawTimeline();
-
-    this.timeline.setOnclickEvent((project, task) => {
+        this.milestonesService.getMilestones().subscribe(m=>{ this.milestones=m;
+        this.timeline = new TimelineGraph(this.graphContainer.nativeElement, this.projects,this.milestones);
+        this.timeline.drawTimeline();
+        
+    this.timeline.setOnclickEvent((project) => {
       this.selectedProject = project;
-      this.selectedTask = task;
-      this.router.navigate(['project/36']);
+        this.router.navigate(['/onclick/project/'+project.projectId]);
+      });
+  
+        this.panzoom = svgPanZoom('#graphviewersvg', {
+          maxZoom: 1,
+          minZoom: 1,
+          zoomScaleSensitivity: 0.25,
+          dblClickZoomEnabled: false,
+          beforePan: (oldp, newp) => {
+            return { x: true, y: false };
+          }
+        });
+     
+        });
+      });
 
+    }
+    
+  ngAfterViewInit() {
+ 
 
-    });
-
-    this.panzoom = svgPanZoom('#graphviewersvg', {
-      maxZoom: 1,
-      minZoom: 1,
-      zoomScaleSensitivity: 0.25,
-      dblClickZoomEnabled: false,
-      beforePan: (oldp, newp) => {
-        return { x: true, y: false };
-      }
-    });
 
   }
+  searchByClient( cname: string)
+  {
+    this.projects= this.projectByClient; 
+     this.projects=this.projects.filter(   
+       project => project.client.name.includes(cname)
+   ); 
+     if(cname=="")
+     {
+      this.projects= this.projectByClient;
+      this.client = "";
+     }
+    this.client = this.projects[0].client.name;
+    }
+  
+ // projectClick(project: Project) {
+ //   this.selectedProject = this.project.taskProjects.filter( t =>
+ //   
+ //   );
+ // }
 
 }

@@ -19,6 +19,8 @@ export class ProjectService {
   constructor(private http: HttpClient) { }
 
   getProjects(): Observable<Project[]> {
+    console.log('inside the project service', this.http.get<Project[]>( this.projectUrl)) ;
+
     return this.http.get<Project[]>( this.projectUrl );
   }
 

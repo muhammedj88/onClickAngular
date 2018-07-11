@@ -31,8 +31,12 @@
       <div class="col-md-2 col-sm-4">
         <div class="card">
           <div class="card-body text-center">
-            <div class="text-muted small text-uppercase font-weight-bold">Title</div>
-            <div class="h2 py-3">1,123</div>
+            <div class="text-muted small text-uppercase font-weight-bold">Client Name</div>
+            <div class="h2 py-3">
+                <input type="text" size="4"  #cname name="cName" id="cname" (keyup)="searchByClient(cname.value)" >
+                <span>{{client}}</span>
+            </div>
+                <i class="glyphicon glyphicon-search font-2xl d-block mt-4"></i>
             <div class="chart-wrapper mx-auto" style="height:40px;width:80px;">
 
             </div>
@@ -70,5 +74,5 @@
   <div>01/01/2018 <span class="float-right" style=" margin-left:85% ">01/01/2019</span></div>
 
 <div class="row box" style=" margin-left:1%; height:100%; max-width:98%; background-color:#fafafa">
-    <div class="box" #graphviewer id=graphviewer style="height:420px; width:100%; position:relative"> </div>
-</div>
+    <div class="box" #graphviewer id=graphviewer style="height:900px; width:100%; position:relative"> </div>
+</div> 

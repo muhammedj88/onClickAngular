@@ -50,6 +50,7 @@
     "ng2-charts": "1.6.0",
     "ngx-bootstrap": "3.0.0",
     "ngx-perfect-scrollbar": "6.1.0",
+    "panzoom": "^5.0.0",
     "rxjs": "6.1.0",
     "simple-line-icons": "^2.4.1",
     "svg-pan-zoom": "^3.5.3",
