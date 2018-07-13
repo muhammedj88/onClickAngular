@@ -19,11 +19,13 @@ private _progressText;
   private _tooltip;
   private _progress;
   private _onClickEvent = null;
-  private _projects;
+  private _projects:Project[];
   private _milestones;
   private _milestoneProjects;
+ 
 
-
+  private _clientName:string;
+  private _projectByClient:Project[];
 
 
 
@@ -31,13 +33,15 @@ private _progressText;
       this._container = container;
       this._projects=projects;
       this._milestones=milestones;
+    //   console.log(this._projects);
   }
   calculateWeeksBetween(date1: Date, date2: Date) {
     return Math.floor( Math.abs(date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24 * 7));
   }
   drawTimeline() {
-    const self = this;
-
+      
+    
+    
     this._size = Math.max(this._container.offsetWidth, this._container.offsetHeight);
     this._weekTick = this._size / (12 * 4);
 
@@ -67,11 +71,36 @@ private _progressText;
     this.drawing = new DrawingService(this._graph);
 
     this.drawAxis();
+    //console.log(this._projectByClient);
+    //console.log(name);
+    //this.drawProjectsClient();
     this.drawProjects();
     window.addEventListener("resize", this.drawTimeline);
 
 }
 
+
+searchByClient( cname: string)
+{
+    //console.log(this._projects);
+   this._projectByClient  = this._projects ;
+   this._projectByClient =this._projects.filter(   
+     _project => _project.client.name.includes(cname)
+ ); 
+   if(cname=="")
+   {
+    this._projectByClient=this._projects ;
+    this._clientName = "";
+    return null;
+ 
+   }
+  //this._clientName = this._projects[0].client.name;
+
+ 
+console.log('project by client',this._projects);
+return this._projectByClient;
+
+  }
 drawAxis() {
     // draw weeks axis
     for (let i = 0; i < 12 * 4; i++) {
@@ -133,6 +162,13 @@ drawAxis() {
 drawProjects() {
     let i = 0;
     this._projects.forEach(project => {
+        this.drawProject(i++, project);
+    });
+}
+
+drawProjectsClient() {
+    let i = 0;
+    this._projectByClient.forEach(project => {
         this.drawProject(i++, project);
     });
 }

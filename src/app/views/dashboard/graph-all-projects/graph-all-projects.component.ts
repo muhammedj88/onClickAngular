@@ -17,23 +17,24 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
   @ViewChild('graphviewer') graphContainer: ElementRef;
   public projects: Project[];
   public milestones: Milestone[];
-  projectByClient: Project [];
-  public client:string;
 
   private timeline: TimelineGraph;
-
+  private _projectByClient:Project[];
+  private _clientName:string;
+  private options: any[];
   private panzoom;
   private selectedProject;
   private selectedTask;
-
+ 
   constructor( private projectService: ProjectService, private router: Router, private milestonesService: MilestoneService) {
     }
 
     ngOnInit() {
+      
       this.projectService.getProjects().subscribe(p => {
         this.projects = p;
-        this.projectByClient = p;
-
+        this._projectByClient = p;
+        
         this.milestonesService.getMilestones().subscribe(m=>{ this.milestones=m;
         this.timeline = new TimelineGraph(this.graphContainer.nativeElement, this.projects,this.milestones);
         this.timeline.drawTimeline();
@@ -63,24 +64,24 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
 
 
   }
-  searchByClient( cname: string)
-  {
-    this.projects= this.projectByClient; 
-     this.projects=this.projects.filter(   
-       project => project.client.name.includes(cname)
-   ); 
-     if(cname=="")
-     {
-      this.projects= this.projectByClient;
-      this.client = "";
-     }
-    this.client = this.projects[0].client.name;
-    }
   
- // projectClick(project: Project) {
- //   this.selectedProject = this.project.taskProjects.filter( t =>
- //   
- //   );
- // }
+searchByClient( cname: string)
+{
+  console.log('this projects',this.projects);
+   this._projectByClient =this.projects.filter(   
+     _project => _project.client.name.includes(cname)
+ ); 
+   if(cname=="")
+   {
+    this._projectByClient=this.projects ;
+    this._clientName = "";
+    return null;
+ 
+   }else{
+ 
+this.timeline = new TimelineGraph(this.graphContainer.nativeElement, this._projectByClient,this.milestones);
+this.timeline.drawTimeline();
+  }
+}
 
 }
