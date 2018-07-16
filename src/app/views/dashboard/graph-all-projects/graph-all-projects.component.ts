@@ -73,15 +73,19 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
    
   }
   callType(value){
+    this.cname="";
+    console.log('changed ');
+    this. drawAfterFilter(this._projectByClient);
     this.selectedValue=value;
     this.search();
+
   
   }
  search(){
   if(this.selectedValue=="Client Name"){
     this.searchByClient();
   }else if(this.selectedValue=="Portfolio Name"){
-    this.searchByPortfolio(this.cname);
+    this.searchByPortfolio();
 
   }else if(this.selectedValue=="Project Type"){
     this.searchByType();
@@ -120,7 +124,7 @@ else if(key=="Start"){
 }
  
   searchByClient() {
-    if (this.cname == "") {
+    if (this.cname == "" || this.cname==undefined) {
       this._projectByClient = this.projects;
       this._clientName = "";
 
@@ -129,11 +133,13 @@ else if(key=="Start"){
         _project => _project.client.name.includes(this.cname)
       );
     }
+    console.log('inside search by type', this._projectByClient);
 
    this. drawAfterFilter(this._projectByClient);
 
   }
   drawAfterFilter(arr){
+    console.log('inside the draw func',arr);
     this.timeline.drawTimeline(arr,this.milestones);
 
     this.panzoom = svgPanZoom('#graphviewersvg', {
@@ -146,36 +152,29 @@ else if(key=="Start"){
       }
     });
   }
-  searchByPortfolio( pname: string)
+  searchByPortfolio()
   {
    
-    this._projectByPortfolilo= this.projects ;
-     this._projectByPortfolilo =this.projects.filter(   
-      projects => projects.client.portfolio.name.includes(pname)
-   ); 
-     if(pname=="")
-     {
-      this._projectByPortfolilo=this.projects ;
-    
-     }
-    
-     this.projects=this._projectByPortfolilo;
-     this. drawAfterFilter(this._projectByPortfolilo);
+    if (this.cname == ""|| this.cname==undefined) {
+      this._projectByPortfolilo = this.projects;
 
+    } else {
+      this._projectByPortfolilo = this.projects.filter(
+        _project =>_project.type.toLowerCase().indexOf(this.cname)==0      ); /// change it to filter by portfolio
+    }
+   this. drawAfterFilter(this._projectByPortfolilo);
     
   }
 searchByType( )
   {
-    if (this.cname == "") {
+    if (this.cname == ""|| this.cname==undefined) {
       this._projectByType = this.projects;
 
     } else {
-      console.log( this._projectByType);
       this._projectByType = this.projects.filter(
-        _project => _project.type.includes(this.cname)
+        _project =>_project.type.toLowerCase().indexOf(this.cname)==0
       );
     }
-
    this. drawAfterFilter(this._projectByType);
 
   }

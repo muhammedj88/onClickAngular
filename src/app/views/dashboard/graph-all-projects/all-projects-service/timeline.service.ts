@@ -37,7 +37,7 @@ private _progressText;
     return Math.floor( Math.abs(date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24 * 7));
   }
   drawTimeline(projects, milestones) {
-      
+      console.log('inside the drawtimeline');
     this._projects=projects;
     this._milestones=milestones;
 
@@ -148,7 +148,6 @@ drawAxis() {
     });
     
     }
-
 
 
 }
