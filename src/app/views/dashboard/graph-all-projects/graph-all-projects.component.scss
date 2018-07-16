@@ -135,20 +135,20 @@ span {
 .progress .value {
   background: #3182bd;
 }
-input[type=text] {
-  width: 130px;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+.box {
   background-color: white;
-  background-position: 10px 10px; 
-  background-repeat: no-repeat;
-  padding: 12px 20px 12px 40px;
-  -webkit-transition: width 0.2s ease-in-out;
-  transition: width 0.2s ease-in-out;
+  padding-top: 5px;
+  margin: 0px 2px 2px 2px;
+  box-shadow: 0 4px 4px -4px #333, 0 -2px 4px -4px #333;
 }
 
-input[type=text]:focus {
-  width: 100%;
+.box-animated {
+  transition: box-shadow .2s;
+  -webkit-transition: box-shadow .2s;
+  -o-transition: box-shadow .2s;
+}
+
+
+.box-animated:hover {
+  box-shadow: 0 5px 4px -4px deepskyblue, 0 -4px 8px -4px deepskyblue;
 }

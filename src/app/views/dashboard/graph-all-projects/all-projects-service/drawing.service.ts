@@ -24,6 +24,14 @@ export class DrawingService {
       .attr('x', x)
       .attr('font-size', size);
   }
+  public drawTextWithIcon(text,x,y,  size) {
+    return this._graph.append('text')
+    .attr('y', y)
+      .attr('x', x)
+       .attr('font-family', 'FontAwesome')
+       .attr('font-size', size)
+      .text(function(d) { return text }); 
+  }
 
   public drawRectangle(width, height, fillColor, strokeColor, strokeWidth = 1) {
     return this._graph.append('rect')
