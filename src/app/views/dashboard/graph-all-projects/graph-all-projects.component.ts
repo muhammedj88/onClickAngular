@@ -27,13 +27,22 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
   private selectedTask;
   private selectedValue;
   private sortedArray: any[];
+  private searchLength;
   private _projectByPortfolilo: Project[];
   private _projectByType: Project[];
+  private closedProjects=0;
+  private openProjects=0;
+  private openProjectPercentage=0;
+  private remainingDays;
+  private daysPercentag;
   constructor(private projectService: ProjectService, private router: Router, private milestonesService: MilestoneService) {
   }
 
   ngOnInit() {
-
+    var startYear=(new Date()).getFullYear();
+    var endYear=startYear+1;
+    this.remainingDays=Math.ceil((new Date('01/01/'+endYear).getTime()-new Date().getTime())/(1000*60*60*24));
+    this.daysPercentag=(this.remainingDays/365) * 100;
     this.projectService.getProjects().subscribe(p => {
       this.projects = p;
       this._projectByClient = p;
@@ -52,7 +61,7 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
         this.router.navigate(['/onclick/project/' + project.projectId]);
         });
         
-
+this.filterOpenProjects();
         this.panzoom = svgPanZoom('#graphviewersvg', {
           maxZoom: 1,
           minZoom: 1,
@@ -69,8 +78,8 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
 
   }
   ngAfterViewInit(){
+  
     this.selectedValue="Client Name";
-   
   }
   callType(value){
     this.cname="";
@@ -133,9 +142,14 @@ else if(key=="Start"){
         _project => _project.client.name.includes(this.cname)
       );
     }
-    console.log('inside search by type', this._projectByClient);
-
+    if(this._projectByClient.length>=1){
+this.searchLength=this._projectByClient.length;
    this. drawAfterFilter(this._projectByClient);
+    }else {
+     this.searchLength=0;
+      this. drawAfterFilter(this.projects);
+
+    }
 
   }
   drawAfterFilter(arr){
@@ -162,8 +176,15 @@ else if(key=="Start"){
       this._projectByPortfolilo = this.projects.filter(
         _project =>_project.type.toLowerCase().indexOf(this.cname)==0      ); /// change it to filter by portfolio
     }
-   this. drawAfterFilter(this._projectByPortfolilo);
-    
+    if(this._projectByPortfolilo.length>=1){
+      this.searchLength=this._projectByPortfolilo.length;
+
+      this. drawAfterFilter(this._projectByPortfolilo);
+       }else {
+        this.searchLength=0;
+         this. drawAfterFilter(this.projects);
+   
+       }    
   }
 searchByType( )
   {
@@ -175,56 +196,78 @@ searchByType( )
         _project =>_project.type.toLowerCase().indexOf(this.cname)==0
       );
     }
-   this. drawAfterFilter(this._projectByType);
+    if(this._projectByType.length>=1){
+      this.searchLength=this._projectByType.length;
 
+      this. drawAfterFilter(this._projectByType);
+       }else {
+        this.searchLength=0;
+
+         this. drawAfterFilter(this.projects);
+   
+       }
   }
   
-  //filterOpenProjects(): Number {
+  filterOpenProjects() {
    
-    //   let openProjects = 0 ;
-    //   let _date = new Date();
-    //   let tasks;
+       let taskStatus=0;
+       let _date = new Date();
+       let tasks;
      
-    // // console.log(_date);
-    // this.projectService.getProjects().subscribe(p => {
-    //   this.projects = null;
-    //   this.projects = p;
-    //   this.projects.forEach(p => {
-    //     tasks = p.taskProjects;
-    //     let newDate = new Date(p.endDate);
-  
-    //     if(newDate.getTime() < _date.getTime()){
-    //       openProjects++;
-    //     }
-    //     else{
-  
-    //       tasks.forEach(t=>{
-  
-    //         if(!tasks.status){
-    //           openProjects++;
+       this.projects.forEach(p => {
+         tasks = p.taskProjects;
+         let newDate = new Date(p.endDate);
+        
+          tasks.forEach(t=>{
+             if(t.status==2){
+               taskStatus++;
              
-    //         }
+             }
            
-    //       });
+          });
                
-              
-    //           }
+               if(taskStatus==tasks.length && newDate.getTime() <= _date.getTime()){
+                 this.closedProjects++;
+               }else{
+                 this.openProjects++;
+               }
   
         
-    //   });
-    // });
+       });
+       this.openProjectPercentage=this.openProjects/this.projects.length*100;
      
-    //   return openProjects;
-    
-    //  }
-    //  filterClosedProjects():Number{
-    //     let open :any = this.filterOpenProjects();
-    //     let closeProjects :any;
-    //     let len :any = this.projects.length;
-    //     closeProjects = len - open;
-   
-    //   return closeProjects;
-    //  }
+      }
+    /*  getProjectPerDone(id:number){
+  let countDone:number=0;
+  let countAll:number = 0;
+  let projectPer:Project = this.projects.filter(p=>p.projectId==id)[0];
+  projectPer.taskProjects.forEach(t=>{
+    if(t.status==2){
+      countDone++;
+    }
+    countAll++;
+  });
+  console.log(countAll);
+  console.log("done tasks :"+countDone);
+  console.log("per : %"+((countDone/countAll)*100));
+}
+
+getALLProjectPerDone(){
+  let countDone:number=0;
+  let countAll:number = 0;
+ this.projects.forEach(p=>{
+   p.taskProjects.forEach(t=>{
+     if(t.status==2){
+       countDone++;
+     }
+     countAll++;
+   })
+ })
+  console.log(countAll);
+  console.log("done tasks :"+countDone);
+  console.log("per : %"+((countDone/countAll)*100));
+}*/
+
   
 
 }

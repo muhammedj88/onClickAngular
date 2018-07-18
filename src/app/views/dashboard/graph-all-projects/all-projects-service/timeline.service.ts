@@ -37,7 +37,6 @@ private _progressText;
     return Math.floor( Math.abs(date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24 * 7));
   }
   drawTimeline(projects, milestones) {
-      console.log('inside the drawtimeline');
     this._projects=projects;
     this._milestones=milestones;
 
@@ -322,5 +321,29 @@ if (row === 0){
     this._tooltip.style('left', + cx + 'px').style('top', (row * 50 - 30) + 'px');
 }
 }
+
+/*getMileStoneDone(mileId:number,projectId){
+    console.log('mile id', mileId,projectId);
+    let countDone:number=0;
+    let countAll:number = 0;
+    console.log('task projects',this._projects);
+    let projectMile:Project = this._projects.filter(p=>p.projectId==projectId)[0];
+    if(projectMile.taskProjects == null)
+    {
+        return ;
+    }
+    projectMile.taskProjects.forEach(t => {
+      if(t.task.milestone.milestoneId==mileId){
+        if(t.status==2){
+        countDone++;
+        }
+        countAll++;
+      }
+    
+    });
+    return ((countDone/countAll)*100);
+    
+  }*/
+     
 }
 

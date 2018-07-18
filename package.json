@@ -53,6 +53,7 @@
     "ngx-perfect-scrollbar": "6.1.0",
     "panzoom": "^5.0.0",
     "rxjs": "6.1.0",
+    "rxjs-compat": "^6.2.2",
     "simple-line-icons": "^2.4.1",
     "svg-pan-zoom": "^3.5.3",
     "ts-helpers": "1.1.2",
