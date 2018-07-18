@@ -15,7 +15,7 @@ const httpOptions = {
 })
 
 export class ClientService {
-  private clientstUrl = 'http://localhost:8080/ProjectOnKlick/rest/client';
+  private clientstUrl = 'http://localhost:8080/ProjectOnClick/rest/client';
   constructor(private http: HttpClient) { }
 
   getClients(): Observable<Client[]> {

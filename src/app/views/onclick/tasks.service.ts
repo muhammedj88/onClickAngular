@@ -14,7 +14,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class TasksService {
-  private projectUrl = 'http://localhost:8080/ProjectOnKlick/rest/task';
+  private projectUrl = 'http://localhost:8080/ProjectOnClick/rest/task';
   constructor(private http: HttpClient) { }
 
   getTasks(): Observable<Tasks[]> {

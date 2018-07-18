@@ -15,7 +15,7 @@ const httpOptions = {
 })
 
 export class PortfolioService {
-  private portfoliostUrl = 'http://localhost:8080/ProjectOnKlick/rest/portfolio';
+  private portfoliostUrl = 'http://localhost:8080/ProjectOnClick/rest/portfolio';
   constructor(private http: HttpClient) { }
 
   getPortfolios(): Observable<Portfolio[]> {

@@ -14,7 +14,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class MilestoneService {
-  private milestoneUrl = 'http://localhost:8080/ProjectOnKlick/rest/milestone';
+  private milestoneUrl = 'http://localhost:8080/ProjectOnClick/rest/milestone';
   constructor(private http: HttpClient) { }
 
   getMilestones(): Observable<Milestone[]> {

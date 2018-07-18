@@ -15,7 +15,7 @@ const httpOptions = {
 })
 
 export class ProjectService {
-  private projectUrl = 'http://localhost:8080/ProjectOnKlick/rest/project';
+  private projectUrl = 'http://localhost:8080/ProjectOnClick/rest/project';
   constructor(private http: HttpClient) { }
 
   getProjects(): Observable<Project[]> {
