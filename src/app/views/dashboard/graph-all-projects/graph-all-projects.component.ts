@@ -35,10 +35,12 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
   private openProjectPercentage=0;
   private remainingDays;
   private daysPercentag;
+  private projectsDone ;
   constructor(private projectService: ProjectService, private router: Router, private milestonesService: MilestoneService) {
   }
 
   ngOnInit() {
+    console.log('first');
     var startYear=(new Date()).getFullYear();
     var endYear=startYear+1;
     this.remainingDays=Math.ceil((new Date('01/01/'+endYear).getTime()-new Date().getTime())/(1000*60*60*24));
@@ -46,6 +48,8 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
     this.projectService.getProjects().subscribe(p => {
       this.projects = p;
       this._projectByClient = p;
+      this.projectsDone=this.getALLProjectPerDone().toFixed(2);
+
       this.milestonesService.getMilestones().subscribe(m => {
       this.milestones = m;
         this.timeline = new TimelineGraph(this.graphContainer.nativeElement);
@@ -54,6 +58,7 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
         this.timeline.setSortEvent((sortBy) => {
           this.sortedArray=this.sortObj(p,sortBy);
       this.drawAfterFilter(this.sortedArray);
+      
     });
 
         this.timeline.setOnclickEvent((project) => {
@@ -237,7 +242,7 @@ searchByType( )
        this.openProjectPercentage=this.openProjects/this.projects.length*100;
      
       }
-    /*  getProjectPerDone(id:number){
+    /* getProjectPerDone(id:number){
   let countDone:number=0;
   let countAll:number = 0;
   let projectPer:Project = this.projects.filter(p=>p.projectId==id)[0];
@@ -250,7 +255,7 @@ searchByType( )
   console.log(countAll);
   console.log("done tasks :"+countDone);
   console.log("per : %"+((countDone/countAll)*100));
-}
+}*/
 
 getALLProjectPerDone(){
   let countDone:number=0;
@@ -266,7 +271,8 @@ getALLProjectPerDone(){
   console.log(countAll);
   console.log("done tasks :"+countDone);
   console.log("per : %"+((countDone/countAll)*100));
-}*/
+  return (countDone/countAll)*100;
+}
 
   
 

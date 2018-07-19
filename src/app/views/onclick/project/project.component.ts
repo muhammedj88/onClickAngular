@@ -46,17 +46,25 @@ export class ProjectComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.updating = false;
-    this.getMilestones();
+    //this.getMilestones();
+   
   }
 
   getMilestones() {
-    return this.milestonesService.getMilestones().subscribe(m => this.milestones = m);
+    return this.milestonesService.getMilestones().subscribe(m => {this.milestones = m
+     
+    }
+    );
   }
 
   getMilestonesPer() {
+    this.getMilestones();
     const types = ['success', 'info', 'warning', 'danger'];
     // tslint:disable-next-line:prefer-const
     let i = 0;
+    if(this.milestones!=undefined){
+      return 0;
+    }
     return this.milestones.map(m => { return {
       value: m.percentage ,
       type: types[i++ % 4] ,
@@ -64,6 +72,7 @@ export class ProjectComponent implements OnInit, AfterViewInit {
     };
     });
   }
+  
 
   getProject() {
     const id =   +this.route.snapshot.paramMap.get('id');

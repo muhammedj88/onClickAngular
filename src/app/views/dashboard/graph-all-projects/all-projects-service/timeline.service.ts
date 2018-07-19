@@ -20,28 +20,41 @@ private _progressText;
   private _progress;
   private _onClickEvent = null;
   private _onClickSort = null;
-
+    private _label;
   private _projects:Project[];
   private _milestones;
   private _milestoneProjects;
  private _timeLineHeight;
-
+private _lastDate;
+private _firstDate;
   private _projectByClient:Project[];
-
+private numOfWeeks;
 
 
   constructor(container) {
       this._container = container;
   }
-  calculateWeeksBetween(date1: Date, date2: Date) {
-    return Math.floor( Math.abs(date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24 * 7));
+  calculateWeeksBetween(date1, date2) {
+    return Math.floor( Math.abs(new Date(date1).getTime() - new Date(date2).getTime()) / (1000 * 60 * 60 * 24 * 7));
   }
   drawTimeline(projects, milestones) {
     this._projects=projects;
     this._milestones=milestones;
-
+    let endDate=new Date();
+    let startDate=new Date();
+    this._projects.forEach(project => {
+        if(new Date(project.endDate).getTime()> new Date(endDate).getTime()){
+            endDate=project.endDate;
+        }
+        this._lastDate =(endDate+'').split('T')[0];
+        if(new Date(project.startDate).getTime()< new Date(startDate).getTime()){
+            startDate=project.startDate;
+        }
+        this._firstDate=(startDate+'').split('T')[0];
+    });
+     this.numOfWeeks=this.calculateWeeksBetween(this._firstDate,this._lastDate);
     this._size = Math.max(this._container.offsetWidth, this._container.offsetHeight);
-    this._weekTick = this._size / (12 * 4);
+    this._weekTick = (this._size / this.numOfWeeks) +1;
 
     if(projects.length==1){
         this._timeLineHeight=200;
@@ -57,7 +70,7 @@ private _progressText;
         .append('svg')
         .attr('id', 'graphviewersvg')
         .attr('width', this._container.offsetWidth)
-        .attr('height', this._timeLineHeight)
+        .attr('height', this._timeLineHeight-150)
 
     this._tooltip = d3.select(this._container)
         .append('div')
@@ -74,10 +87,7 @@ private _progressText;
     this._graph = this._svg.append('g');
 
     this.drawing = new DrawingService(this._graph);
-    var startYear=(new Date()).getFullYear();
-    var endYear=startYear+1;
-    this.drawing.drawText('01/01/'+startYear, 80, -60, 15).style('stroke', '#a8b4b4').style('fill', '#a8b4b4');
-    this.drawing.drawText('01/01/'+endYear, this._container.offsetWidth+25, -60, 15).style('stroke', '#a8b4b4').style('fill', '#a8b4b4');
+   
 
 
     this.drawAxis();
@@ -89,16 +99,16 @@ private _progressText;
 
 
 drawAxis() {
-    
+   
     // draw weeks axis
-    for (let i = 0; i < 12 * 4; i++) {
+    for (let i = 0; i <= this.numOfWeeks; i++) {
         let weekRect = this.drawing.drawRectangle(40, this._timeLineHeight+10, 'white', 1)
             .attr('x', i * this._weekTick + this._goffset)
             .attr('y', 0)
             .style('opacity', 0.25);
 
         weekRect.on('mouseover', (event) => {
-          if (i === this.weekOfYear()){
+          if (i === this.getWeek(new Date())){
             weekRect.style('fill',  'green');
 
           } else if (i !== 2){
@@ -110,7 +120,7 @@ drawAxis() {
      });
 
         weekRect.on('mouseout', (event) => {
-          if(i != this.weekOfYear()) {
+          if(i != this.getWeek(new Date())) {
             weekRect.style('fill', 'white');
           }
         });
@@ -125,7 +135,7 @@ drawAxis() {
         if (i === 2) {
             text.style('stroke', 'red');
         }
-        if(i === this.weekOfYear()){
+        if(i === this.getWeek(new Date())){
           weekRect.style('fill', 'green').attr('width',10).style('stroke','dotted');
         }
     }
@@ -150,84 +160,91 @@ drawAxis() {
 
 
 }
- weekOfYear() {
-  let now: any;
+ getWeek(date) {
   let onejan:  any;
-  now = new Date();
+  let now: any;
+   now = new Date(date);
    onejan = new Date(now.getFullYear(), 0, 1);
   let week = Math.ceil( (((now - onejan) / 86400000) + onejan.getDay() + 1) / 7 );
   return week;
-}
+  }
+ 
+  
 drawProjects() {
     
     let i = 0;
     this._projects.forEach(project => {
+      
         this.drawProject(i++, project);
     });
     this.drawing.drawLine(-480, this._timeLineHeight, this._size + this._goffset, this._timeLineHeight, 1)
     .style('opacity', 0.25);
+    var startYear=(new Date()).getFullYear();
+    this.drawing.drawText(this._firstDate, 80, -60, 15).style('stroke', '#a8b4b4').style('fill', '#a8b4b4');
+    this.drawing.drawText(this._lastDate, this._container.offsetWidth+25, -60, 15).style('stroke', '#a8b4b4').style('fill', '#a8b4b4');
 }
 
 
- /*getRandomColor() {
-    var colorsArr = ['#6b2f39','#d6c0c0', '#f09898' ,'	#90c8da','#80abe0', '#8bbf89','#6cc3b7','#8895e1','#c9c2ff','#1fa091','#f4f377','#e2c78d','	#5eb5c0','	#ef8d9e','#d97f7f','#6e9d8d'];
-    var color = colorsArr[Math.floor(Math.random()*colorsArr.length)];
-    return color;
-  }*/
-   selectColor(){
-    var r = Math.floor(Math.random()*256);          // Random between 0-255
-    var g = Math.floor(Math.random()*256);          // Random between 0-255
-    var b = Math.floor(Math.random()*256);          // Random between 0-255
-    var rgb = 'rgb(' + r + ',' + g + ',' + b + ')'; // Collect all to a string
-return rgb;
-}
-
-getRGBValues(str, scale) {
-    var match = str.match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
-    return match ? {
-      red: match[1],
-      green: match[2]+scale,
-      blue: match[3]+scale
-    } : {};
+ getRandomColor(i) {
+    var colorsArr = ['#6b2f39','#d6c0c0', '#f09898' ,'#90c8da','#80abe0','#ffb6b9', '#8bbf89','#f6a1c6','#96bdd5','#c9c2ff','#8895e1','#c9c2ff','#ffb6b9','#1fa091','#fff9cd','#5eb5c0','#ef8d9e','#d97f7f','#6e9d8d'];
+    if(i >colorsArr.length-1){
+    i = Math.floor(Math.random()*colorsArr.length);
+    }
+    return colorsArr[i];
   }
-  rgb2hex(red, green, blue) {
-    var rgb = blue | (green << 8) | (red << 16);
-    return '#' + (0x1000000 + rgb).toString(16).slice(1)
+   
+ 
+changeHslColor(color){
+var h=color[0];
+var s=color[1];
+var l=color[2];
+var colorArrar=[h,s,l];
+return colorArrar;
+}
+
+ColorFunc(color,i){
+   
+    var hexToHsl = require('hex-to-hsl');
+    var hslColor=this.changeHslColor(hexToHsl(color));
+    var hsl = require('hsl-to-hex')
+    var hue = hslColor[0] ;
+    var saturation = hslColor[1]+i*5;
+var luminosity = hslColor[2]-5*(i+1);
+var hex = hsl(hue, saturation, luminosity);
+return hex;
 }
 drawProject(row, project: Project) {
-    var selectedColor1=this.selectColor();
-    var selectedColor2=this.selectColor();
+   let startWeek= this.getWeek(project.startDate);
     this.drawing.drawText(project.name, 20, row * 50 + 25, 15).style('stroke', '#a8b4b4').style('fill', '#a8b4b4');
     this.drawing.drawText(project.client.name, -110, row * 50 + 25, 15).style('stroke', '#a8b4b4').style('fill', '#a8b4b4');
+    this.drawing.drawText(project.client.portfolio.name, -220, row * 50 + 25, 15).style('stroke', '#a8b4b4').style('fill', '#a8b4b4');
+
     this.drawing.drawText(project.startDate.split('T')[0], -340, row * 50 + 25, 15).style('stroke', '#a8b4b4').style('fill', '#a8b4b4');
     this.drawing.drawText(project.endDate.split('T')[0], -450, row * 50 + 25, 15).style('stroke', '#a8b4b4').style('fill', '#a8b4b4');
+    var randomColor=this.getRandomColor(row);
+    this.drawing.drawLine(-480, row * 50, this._size + this._goffset, row * 50, 1).style('opacity', 0.25); 
+    console.log('the project',project);
 
+    console.log('the milestones',project.milestoneProjects);
 
-    ;
-    this.drawing.drawLine(-480, row * 50, this._size + this._goffset, row * 50, 1)
-        .style('opacity', 0.25);
+        if(project.taskProjects!=undefined && project.milestoneProjects !=undefined){
     project.milestoneProjects.forEach((milestone,i) => {
-        let length = Math.abs(milestone.endWeek - milestone.startWeek );
-        
-       var rgbcolor1= this.getRGBValues(selectedColor1,(i+1)+20);
-       var rgbcolor2= this.getRGBValues(selectedColor2,(i+1)+20);
+        console.log('the milestones',milestone);
 
-       var color1=this.rgb2hex(rgbcolor1.red,rgbcolor1.green,rgbcolor1.blue);
-       var color2=this.rgb2hex(rgbcolor2.red,rgbcolor2.green,rgbcolor2.blue);
-       var scaledColor=d3.scaleLinear()
-       .domain([0,6])
-       .range([color1,color2]);
-        let milestoneRect = this.drawing.drawRectangle( length * this._weekTick, 45  , scaledColor(i+1%6) , 'white', 1);
+        let length = Math.abs((milestone.endWeek) - (milestone.startWeek) );
+        
+        let milestoneRect = this.drawing.drawRectangle( length * this._weekTick, 45  , this.ColorFunc(randomColor,i) , 'white', 1);
+        
 
         milestoneRect.attr('rx', 10)
             .attr('ry', 10)
-            .attr('x', milestone.startWeek * this._weekTick + this._goffset)
+            .attr('x', (milestone.startWeek)* this._weekTick + this._goffset)
             .attr('y', row * 50 + 2)
             .style('opacity', 0.6)
             .classed('project-milestone');
             
             milestoneRect.on('mouseover', (event) => {
-            this.showTooltip(row, project, milestone);
+            this.showTooltip(i+1,row, project, milestone);
             this.showProgressBar(row, project, milestone,i);
             milestoneRect.style('opacity', 1);
         });
@@ -254,7 +271,7 @@ drawProject(row, project: Project) {
          
 
     });
-    
+}
 }
  
 
@@ -295,7 +312,7 @@ showProgressBar(row, project, milestone,i){
           
         }
 
-showTooltip(row, project, milestone) {
+showTooltip(i,row, project, milestone) {
     this._tooltip.style('display', 'block').style('opacity', 0.95);
     this._tooltip.html('');
     let list = this._tooltip.append('pre')
@@ -307,30 +324,33 @@ showTooltip(row, project, milestone) {
         .style('margin', '0px');
         
         
-        
-        list.append('li').html('Name&#9;&#9 <a href="#">' + project.name + '</a>')
+        list.append('li').html('Done Tasks&#9;&#9 <a href="#">' + this.getMileStoneDone(i,project.projectId) + '%</a>')
         .attr('class', 'list-group-item')
         .style('padding', '4px');
         let length = Math.abs(milestone.endWeek - milestone.startWeek );
 
-    let cx: number = (length / 2 + milestone.startWeek) * this._weekTick + this._goffset;
+    let cx: number = (length /2 + milestone.startWeek) * this._weekTick + this._goffset*2;
+    if(cx>1000){
+        cx=cx-200;
+    }
+    if(cx<400){
+        cx=cx+200;
+    }
 if (row === 0){
   this._tooltip.style('left', + cx + 'px').style('top', 20 + 'px');
 
 } else{
-    this._tooltip.style('left', + cx + 'px').style('top', (row * 50 - 30) + 'px');
+    this._tooltip.style('left', + cx-200 + 'px').style('top', (row * 30+50) + 'px');
 }
 }
 
-/*getMileStoneDone(mileId:number,projectId){
-    console.log('mile id', mileId,projectId);
+getMileStoneDone(mileId:number,projectId){
     let countDone:number=0;
-    let countAll:number = 0;
-    console.log('task projects',this._projects);
+    let countAll:number = 1;
     let projectMile:Project = this._projects.filter(p=>p.projectId==projectId)[0];
     if(projectMile.taskProjects == null)
     {
-        return ;
+        return 0;
     }
     projectMile.taskProjects.forEach(t => {
       if(t.task.milestone.milestoneId==mileId){
@@ -343,7 +363,7 @@ if (row === 0){
     });
     return ((countDone/countAll)*100);
     
-  }*/
+  }
      
 }
 
