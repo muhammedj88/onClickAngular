@@ -174,7 +174,6 @@ drawProjects() {
     
     let i = 0;
     this._projects.forEach(project => {
-      
         this.drawProject(i++, project);
     });
     this.drawing.drawLine(-480, this._timeLineHeight, this._size + this._goffset, this._timeLineHeight, 1)
@@ -186,7 +185,7 @@ drawProjects() {
 
 
  getRandomColor(i) {
-    var colorsArr = ['#6b2f39','#d6c0c0', '#f09898' ,'#90c8da','#80abe0','#ffb6b9', '#8bbf89','#f6a1c6','#96bdd5','#c9c2ff','#8895e1','#c9c2ff','#ffb6b9','#1fa091','#fff9cd','#5eb5c0','#ef8d9e','#d97f7f','#6e9d8d'];
+    var colorsArr = ['#e664bc','#d6c0c0', '#8e52b8' ,'#90c8da','#f4f377','#ef3e36','#80abe0','#ffb6b9', '#8bbf89','#f6a1c6','#96bdd5','#c9c2ff','#8895e1','#c9c2ff','#ffb6b9','#1fa091','#fff9cd','#5eb5c0','#ef8d9e','#d97f7f','#6e9d8d'];
     if(i >colorsArr.length-1){
     i = Math.floor(Math.random()*colorsArr.length);
     }
@@ -223,18 +222,14 @@ drawProject(row, project: Project) {
     this.drawing.drawText(project.endDate.split('T')[0], -450, row * 50 + 25, 15).style('stroke', '#a8b4b4').style('fill', '#a8b4b4');
     var randomColor=this.getRandomColor(row);
     this.drawing.drawLine(-480, row * 50, this._size + this._goffset, row * 50, 1).style('opacity', 0.25); 
-    console.log('the project',project);
 
-    console.log('the milestones',project.milestoneProjects);
 
-        if(project.taskProjects!=undefined && project.milestoneProjects !=undefined){
+        //if(project.taskProjects!=undefined && project.milestoneProjects !=undefined){
     project.milestoneProjects.forEach((milestone,i) => {
-        console.log('the milestones',milestone);
 
         let length = Math.abs((milestone.endWeek) - (milestone.startWeek) );
         
-        let milestoneRect = this.drawing.drawRectangle( length * this._weekTick, 45  , this.ColorFunc(randomColor,i) , 'white', 1);
-        
+        let milestoneRect = this.drawing.drawRectangle( length * this._weekTick, 40  , this.ColorFunc(randomColor,i) , 'white', 1);
 
         milestoneRect.attr('rx', 10)
             .attr('ry', 10)
@@ -266,12 +261,12 @@ drawProject(row, project: Project) {
         });
 
         let cx: number = (length / 2 + milestone.startWeek) * this._weekTick + this._goffset;
-        this.drawing.drawText(this._milestones[i].name, cx, row * 50 + 25, 10)
+        this.drawing.drawText(this._milestones[i].name, cx, row * 50 + 25, 12)
          .style('text-anchor', 'middle').style('stroke', 'white').style('fill', 'white');
          
 
     });
-}
+//}
 }
  
 

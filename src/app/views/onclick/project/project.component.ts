@@ -41,24 +41,21 @@ export class ProjectComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.getProject();
+
   }
 
 
   ngOnInit() {
     this.updating = false;
-    //this.getMilestones();
-   
+    this.getMilestones();
+    console.log('milestone on init ',this.milestones);
   }
 
   getMilestones() {
-    return this.milestonesService.getMilestones().subscribe(m => {this.milestones = m
-     
-    }
-    );
+    return this.milestonesService.getMilestones().subscribe(m => this.milestones = m);
   }
 
   getMilestonesPer() {
-    this.getMilestones();
     const types = ['success', 'info', 'warning', 'danger'];
     // tslint:disable-next-line:prefer-const
     let i = 0;

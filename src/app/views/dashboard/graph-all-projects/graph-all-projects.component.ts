@@ -40,7 +40,6 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    console.log('first');
     var startYear=(new Date()).getFullYear();
     var endYear=startYear+1;
     this.remainingDays=Math.ceil((new Date('01/01/'+endYear).getTime()-new Date().getTime())/(1000*60*60*24));
@@ -88,10 +87,19 @@ this.filterOpenProjects();
   }
   callType(value){
     this.cname="";
-    console.log('changed ');
+    if(this._projectByClient.length>0){
     this. drawAfterFilter(this._projectByClient);
     this.selectedValue=value;
+
     this.search();
+    }else if(this._projectByPortfolilo.length>0){
+      this. drawAfterFilter(this._projectByPortfolilo);
+
+    }else if(this._projectByType.length>0){
+      this. drawAfterFilter(this._projectByType);
+
+    }
+    
 
   
   }
@@ -158,9 +166,7 @@ this.searchLength=this._projectByClient.length;
 
   }
   drawAfterFilter(arr){
-    console.log('inside the draw func',arr);
     this.timeline.drawTimeline(arr,this.milestones);
-
     this.panzoom = svgPanZoom('#graphviewersvg', {
       maxZoom: 1,
       minZoom: 1,
@@ -173,24 +179,26 @@ this.searchLength=this._projectByClient.length;
   }
   searchByPortfolio()
   {
-   
-    if (this.cname == ""|| this.cname==undefined) {
+    if (this.cname == "" || this.cname==undefined) {
       this._projectByPortfolilo = this.projects;
+      this._clientName = "";
 
     } else {
       this._projectByPortfolilo = this.projects.filter(
-        _project =>_project.type.toLowerCase().indexOf(this.cname)==0      ); /// change it to filter by portfolio
+        _project => _project.client.portfolio.name.includes(this.cname)
+      );
     }
     if(this._projectByPortfolilo.length>=1){
-      this.searchLength=this._projectByPortfolilo.length;
+this.searchLength=this._projectByPortfolilo.length;
+   this. drawAfterFilter(this._projectByPortfolilo);
+    }else {
+     this.searchLength=0;
+      this. drawAfterFilter(this.projects);
 
-      this. drawAfterFilter(this._projectByPortfolilo);
-       }else {
-        this.searchLength=0;
-         this. drawAfterFilter(this.projects);
-   
-       }    
+    }
+
   }
+  
 searchByType( )
   {
     if (this.cname == ""|| this.cname==undefined) {
@@ -268,9 +276,7 @@ getALLProjectPerDone(){
      countAll++;
    })
  })
-  console.log(countAll);
-  console.log("done tasks :"+countDone);
-  console.log("per : %"+((countDone/countAll)*100));
+ 
   return (countDone/countAll)*100;
 }
 
