@@ -1,22 +1,18 @@
 {
-  "name": "@coreui/coreui-free-angular-admin-template",
+  "name": "onClick",
   "version": "2.0.0-rc.0",
   "description": "CoreUI Free Angular 2+ Admin Template",
   "author": {
-    "name": "Łukasz Holeczek",
-    "url": "http://holeczek.pl",
-    "github": "https://github.com/mrholek",
-    "twitter": "https://twitter.com/lukaszholeczek"
+    "name": "Ahdab Serhan",
+    "github": "https://github.com/mrholek"
   },
   "contributors": [
     {
-      "name": "Andrzej Kopański",
+      "name": "Ahdab Serhan",
       "url": "https://github.com/xidedix"
     }
   ],
   "homepage": "https://coreui.io/angular",
-  "copyright": "Copyright 2018 creativeLabs Łukasz Holeczek",
-  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -54,6 +50,7 @@
     "ngx-bootstrap": "3.0.0",
     "ngx-perfect-scrollbar": "6.1.0",
     "panzoom": "^5.0.0",
+    "repl": "^0.1.3",
     "rxjs": "6.1.0",
     "rxjs-compat": "^6.2.2",
     "simple-line-icons": "^2.4.1",
@@ -68,11 +65,11 @@
     "@angular/language-service": "6.0.2",
     "@types/jasmine": "2.8.7",
     "@types/jasminewd2": "2.0.3",
-    "@types/node": "^10.1.2",
+    "@types/node": "^10.5.2",
     "codelyzer": "4.3.0",
     "jasmine-core": "3.1.0",
     "jasmine-spec-reporter": "4.2.1",
-    "karma": "2.0.2",
+    "karma": "^2.0.4",
     "karma-chrome-launcher": "2.2.0",
     "karma-coverage-istanbul-reporter": "2.0.0",
     "karma-jasmine": "1.1.2",
