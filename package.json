@@ -47,6 +47,7 @@
     "mutationobserver-shim": "^0.3.2",
     "ng-auto-complete": "^2.10.5",
     "ng2-charts": "1.6.0",
+    "ng2-order-pipe": "^0.1.5",
     "ngx-bootstrap": "3.0.0",
     "ngx-perfect-scrollbar": "6.1.0",
     "panzoom": "^5.0.0",

@@ -3,6 +3,7 @@ import { ProjectService } from './../project.service';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MilestoneService } from '../milestone.service';
+import { StakeholderService } from './../stakeholder.service';
 
 @Component({
   selector: 'app-project',
@@ -17,10 +18,11 @@ export class ProjectComponent implements OnInit, AfterViewInit {
   public t: any[];
   public tasks: MyTask[];
   public milestones: Milestone[];
+  public stakeholders: Stakeholder[];
 
   public hoverTask: MyTask;
-  public selectedTasks: TaskProject[];
-
+  public selectedTasks: SelectedTask[];
+  public selectedTasksStakeHolder: MyTask[];
   @ViewChild('markers')
   markers: ElementRef;
 
@@ -32,44 +34,49 @@ export class ProjectComponent implements OnInit, AfterViewInit {
 
   public updating: Boolean;
 
+  public key: String = 'status'; // set default
+  public reverse: Boolean = false;
+  public weekClicked: Boolean = false;
+
   d: Date;
   constructor(private route: ActivatedRoute,
               private projectService: ProjectService,
               private taskProjectService: TaskProjectService,
-              private milestonesService: MilestoneService
+              private milestonesService: MilestoneService,
+              private stakeholderService: StakeholderService
             ) { }
 
   ngAfterViewInit() {
     this.getProject();
-
   }
 
 
   ngOnInit() {
     this.updating = false;
     this.getMilestones();
-    console.log('milestone on init ',this.milestones);
   }
 
   getMilestones() {
     return this.milestonesService.getMilestones().subscribe(m => this.milestones = m);
   }
 
+  getStakeholders() {
+    return this.stakeholderService.getStakeholders().subscribe(s => this.stakeholders = s);
+  }
+
   getMilestonesPer() {
-    const types = ['success', 'info', 'warning', 'danger'];
+    const types = ['gray-400', 'gray-500',  'gray-600', 'gray-700', 'gray-800', 'gray-900'];
     // tslint:disable-next-line:prefer-const
     let i = 0;
     if(this.milestones!=undefined){
-      return 0;
-    }
     return this.milestones.map(m => { return {
       value: m.percentage ,
-      type: types[i++ % 4] ,
+      type: types[i++ % 6] ,
       label: m.percentage + ' % - ' + m.name
     };
     });
   }
-  
+  }
 
   getProject() {
     const id =   +this.route.snapshot.paramMap.get('id');
@@ -78,7 +85,7 @@ export class ProjectComponent implements OnInit, AfterViewInit {
                 this.project = null;
                 this.project = p;
                 this.getTicks();
-                this.getTasks();
+                this.getTasks(0);
                 this.getSummary();
               });
   }
@@ -100,9 +107,10 @@ export class ProjectComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getTasks() {
+  getTasks(stakeholder: number) {
     this.tasks = [];
-    this.project.taskProjects.forEach(t => {
+    // tslint:disable-next-line:triple-equals
+    this.project.taskProjects.filter(t => ((t.stakeholder.stakeholderId == stakeholder) || (stakeholder == 0))).forEach(t => {
       if (this.tasks.filter(m => (m.stakeholderId === t.stakeholder.stakeholderId)
                           && (m.week === t.week)).length === 0) {
                             this.tasks.push({
@@ -123,7 +131,6 @@ export class ProjectComponent implements OnInit, AfterViewInit {
 
     let c: number;
     for ( let i = 0; i < this.tasks.length; i++ ) {
-      console.log(this.tasks[i]);
       if (this.tasks[i].num > 5 && this.tasks[i].num <= 10) {
         this.tasks[i].color = 'orange';
       this.getTaskStyle(this.tasks[i], 'o');
@@ -158,23 +165,23 @@ export class ProjectComponent implements OnInit, AfterViewInit {
       (t.status === 2) && (t.week === task.week)).length / task.num;
     switch (true) {
       case (val < 0.13) :
-      task.done = color + 'task0'; break;
+      task.done = 'task0'; break;
       case (val < 0.25) :
-      task.done =  color + 'task10'; break;
+      task.done = 'task10'; break;
       case (val < 0.38) :
-      task.done =  color + 'task15'; break;
+      task.done = 'task15'; break;
       case (val < 0.50) :
-      task.done =  color + 'task20'; break;
+      task.done = 'task20'; break;
       case (val < 0.63) :
-      task.done =  color + 'task30'; break;
+      task.done = 'task30'; break;
       case (val < 0.75) :
-      task.done =  color + 'task40'; break;
+      task.done = 'task40'; break;
       case (val < 0.88) :
-      task.done =  color + 'task45'; break;
+      task.done = 'task45'; break;
       case (val < 0.100) :
-      task.done =  color + 'task50'; break;
+      task.done = 'task50'; break;
       default:
-      task.done =  color + 'taskonehundred';
+      task.done = 'taskonehundred';
        }
   }
 
@@ -182,19 +189,41 @@ export class ProjectComponent implements OnInit, AfterViewInit {
     this.selectedTasks = this.project.taskProjects.filter( t =>
       (t.stakeholder.stakeholderId === task.stakeholderId) &&
       (t.week === task.week)
-    );
+    ).map(t => { return {
+      id: t.taskProjectId,
+      stakeholder: t.stakeholder.name,
+      task: t.task.description,
+      status : t.status,
+      week: t.week
+    };
+  });
+    this.weekClicked = false;
   }
 
-  updateTask(task: TaskProject) {
+  weekClick(week: number) {
+    this.selectedTasks = this.project.taskProjects
+    .filter( t => (t.week === week)).map(t => { return {
+      id: t.taskProjectId,
+      stakeholder: t.stakeholder.name,
+      task: t.task.description,
+      status : t.status,
+      week: t.week
+    };
+  });
+  this.weekClicked = true;
+  }
+
+  updateTask(task: SelectedTask) {
     this.updating = true;
-    this.taskProjectService.updateTaskProject(task.taskProjectId).subscribe(t => {
+    this.taskProjectService.updateTaskProject(task.id).subscribe(t => {
       if (task.status === 1) {
-        task.status = 2;
+        this.project.taskProjects.find( tsk => tsk.taskProjectId == task.id).status = 2;
       } else {
-        task.status = 1;
+        this.project.taskProjects.find( tsk => tsk.taskProjectId == task.id).status = 1;
       }
     this.updating = false;
-    this.getTasks();
+    this.getTasks(0);
+    this.getSummary();
     });
   }
 
@@ -213,7 +242,17 @@ export class ProjectComponent implements OnInit, AfterViewInit {
 
   scroll(el) {
     el.scrollIntoView();
-}
+  }
+
+  stakeholderSelected(stakeholder: number) {
+    this.getTasks(stakeholder);
+    this.getSummary();
+  }
+
+  sort(key) {
+    this.key = key;
+    this.reverse = !this.reverse;
+  }
 
 }
 
@@ -226,4 +265,12 @@ interface MyTask {
   left: number;
   top: number;
   color: string;
+}
+
+interface SelectedTask {
+  id: number;
+  stakeholder: String;
+  task: String;
+  status: number;
+  week: number;
 }

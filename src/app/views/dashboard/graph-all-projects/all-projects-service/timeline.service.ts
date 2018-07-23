@@ -113,10 +113,8 @@ export class TimelineGraph {
 
                 } else if (i !== 2) {
                     weekRect.style('fill', 'skyblue');
-                } else if (i === 2) {
-                    weekRect.style('fill', 'red');
-
-                }
+                } 
+                
             });
 
             weekRect.on('mouseout', (event) => {

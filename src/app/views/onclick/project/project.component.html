@@ -1,98 +1,136 @@
 <div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-header">
-        project: <b>{{project?.name}}</b>
-        <span class="badge badge-pill badge-secondary  float-right">{{project?.taskProjects.length}}</span>
-        <span *ngIf="(summry?.done < 0.6); else sWarning" class="badge badge-pill badge-danger float-right">{{summry?.done * 100}}%</span>
-        <span #sWarning *ngIf="(summry?.done < 0.9 && summry?.done >= 0.6); else sSuccess" class="badge badge-pill badge-warning float-right">{{summry?.done * 100}}%</span>
-        <span #sSuccess *ngIf="(summry?.done > 0.9)" class="badge badge-pill badge-success float-right">{{summry?.done * 100}}%</span>
-      </div>
-      <div class="card-body">
-        <div>{{project?.startDate | date:'dd-MM-yyyy'}} <span class="float-right">{{project?.endDate | date:'dd-MM-yyyy'}}</span></div>
-        <div #target (drag)="scroll(target)" class="eventcontrol" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-          <div class="ec-items ec-draggable" style="top:0px;" [ngStyle]="{'height':height+'px' , 'width' : ((weekNumber + 1)  *  (40)) + 'px'}">
-            <div *ngFor="let task of tasks" class="ec-dot" [ngClass]="task.done" [ngStyle]="{  'top': ((height - task.top) - 36)+'px' ,
-                  'left': task.left +'px' ,
-                  'text-align':'center' ,
-                  'vertical-align':'middle' ,
-                  'border': '1px solid '+task.color ,
-                  'cursor':pointer ,
-                  'background-color': task.color
-                }" (click)="taskClick(task)" popover="{{task.stakholderName}} - {{task.num}} tasks" triggers="mouseenter:mouseleave">
-                <div [ngSwitch]="task.stakeholderId"  style="font-size: 26px;">
-                    <i *ngSwitchCase="1" class="icon-boy-smiling"></i>
-                    <i *ngSwitchCase="2" class="icon-fat-boy-smiling"></i>
-                    <i *ngSwitchCase="3" class="icon-girl-embarrased"></i>
-                    <i *ngSwitchCase="4" class="icon-hipster-smiling"></i>
-                    <i *ngSwitchCase="5" class="icon-man-with-moustache-smiling"></i>
-                    <i *ngSwitchCase="6" class="icon-smiling-baby"></i>
-                    <i *ngSwitchCase="7" class="icon-smiling-girl"></i>
-                    <i *ngSwitchCase="8" class="icon-naughty-girl"></i>
-                    <i *ngSwitchCase="9" class="icon-philosophizing-boy"></i>
-                    <i *ngSwitchCase="10" class="icon-happy-woman"></i>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          project:
+          <b>{{project?.name}}</b>
+          <span class="badge badge-pill badge-secondary  float-right">{{project?.taskProjects.length * summry?.done | number:'1.0-0'}} of {{project?.taskProjects.length}}</span>
+          <span *ngIf="(summry?.done < 0.6); else sWarning" class="badge badge-pill badge-danger float-right">{{summry?.done  * 100 | number:'1.0-0'}}%</span>
+          <span #sWarning *ngIf="(summry?.done < 0.9 && summry?.done >= 0.6); else sSuccess" class="badge badge-pill badge-warning float-right">{{summry?.done * 100 | number:'1.0-0'}}%</span>
+          <span #sSuccess *ngIf="(summry?.done > 0.9)" class="badge badge-pill badge-success float-right">{{summry?.done * 100 | number:'1.0-0'}} %</span><br>
+          <span>
+              <button (click)="stakeholderSelected(0)" class="btn btn-square btn-light" type="button" style="width: 9.09%;"><i class='fa fa-group fa-2x' style='size: 50px'></i><br>All</button>
+              <button (click)="stakeholderSelected(1)" class="btn btn-square btn-light" type="button" style="width: 9.09%;"><i class='icon-boy-smiling fa-2x' style='size: 50px'></i><br> PMO</button>
+              <button (click)="stakeholderSelected(2)" class="btn btn-square btn-light" type="button" style="width: 9.09%;"><i class='icon-fat-boy-smiling fa-2x'></i><br>Project </button>
+              <button (click)="stakeholderSelected(3)" class="btn btn-square btn-light" type="button" style="width: 9.09%;"><i class='icon-girl-embarrased fa-2x'></i><br>COM</button>
+              <button (click)="stakeholderSelected(4)" class="btn btn-square btn-light" type="button" style="width: 9.09%;"><i class='icon-hipster-smiling fa-2x'></i><br>Migration</button>
+              <button (click)="stakeholderSelected(5)" class="btn btn-square btn-light" type="button" style="width: 9.09%;"><i class='icon-man-with-moustache-smiling fa-2x'></i><br>PDO</button>
+              <button (click)="stakeholderSelected(6)" class="btn btn-square btn-light" type="button" style="width: 9.09%;"><i class='icon-smiling-baby fa-2x'></i><br>Testing</button>
+              <button (click)="stakeholderSelected(7)" class="btn btn-square btn-light" type="button" style="width: 9.09%;"><i class='icon-smiling-girl fa-2x'></i><br>Deployment</button>
+              <button (click)="stakeholderSelected(8)" class="btn btn-square btn-light" type="button" style="width: 9.09%;"><i class='icon-naughty-girl fa-2x'></i><br>ADM</button>
+              <button (click)="stakeholderSelected(9)" class="btn btn-square btn-light" type="button" style="width: 9.09%;"><i class='icon-philosophizing-boy fa-2x'></i><br>Program</button>
+              <button (click)="stakeholderSelected(10)" class="btn btn-square btn-light" type="button" style="width: 9.09%;"><i class='icon-happy-woman fa-2x'></i><br>Security exp</button>
+            </span>
+          <!--<div class="col-md-2 float-right">
+            <select class="form-control form-control-sm" id="stakeholderSelect" name="stakeholderSelect"
+            (change)="stakeholderSelected($event.target.value)">
+              <option (onselect)="stakeholderSelected(0)" value="0" ng-reflect-value="0" selected>All Stakeholders</option>
+              <option (onselect)="stakeholderSelected(1)" data-content="" value="1"><i class='fa fa-address-book-o' aria-hidden='true'></i>PMO</option>
+              <option onselect="stakeholderSelected(2)" value="2" ng-reflect-value="2">Project manager</option>
+              <option onselect="stakeholderSelected(3)" value="3" ng-reflect-value="3">COM</option>
+              <option onselect="stakeholderSelected(4)" value="4" ng-reflect-value="4">Migration manager</option>
+              <option onselect="stakeholderSelected(5)" value="5" ng-reflect-value="5">PDO</option>
+              <option onselect="stakeholderSelected(6)" value="6" ng-reflect-value="6">Testing manager</option>
+              <option onselect="stakeholderSelected(7)" value="7" ng-reflect-value="7">Deployment manager</option>
+              <option onselect="stakeholderSelected(8)" value="8" ng-reflect-value="8">ADM</option>
+              <option onselect="stakeholderSelected(9)" value="9" ng-reflect-value="9">Program Manager </option>
+              <option onselect="stakeholderSelected(10)" value="10" ng-reflect-value="10">Security expert</option>
+            </select>
+          </div>-->
+        </div>
+        <div class="card-body">
+          <div>{{project?.startDate | date:'dd-MM-yyyy'}}
+            <span class="float-right">{{project?.endDate | date:'dd-MM-yyyy'}}</span>
+          </div>
+          <div #target (drag)="scroll(target)" class="eventcontrol" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            <div class="ec-items ec-draggable" style="top:0px;" [ngStyle]="{'height':height+'px' , 'width' : ((weekNumber + 1)  *  (40)) + 'px'}">
+              <div *ngFor="let task of tasks" class="ec-dot" [ngClass]="task.done" [ngStyle]="{  'top': ((height - task.top) - 36)+'px' ,
+                    'left': task.left +'px' ,
+                    'text-align':'center' ,
+                    'color': task.color ,
+                    'vertical-align':'middle' ,
+                    'border': '1px solid ' + task.color ,
+                    'cursor':pointer ,
+                    'background-color': 'lightgreen'
+                  }" (click)="taskClick(task)" popover="{{task.stakholderName}} - {{task.num}} tasks" triggers="mouseenter:mouseleave">
+                <div [ngSwitch]="task.stakeholderId" style="font-size: 26px;">
+                  <i *ngSwitchCase="1" class="icon-boy-smiling"></i>
+                  <i *ngSwitchCase="2" class="icon-fat-boy-smiling"></i>
+                  <i *ngSwitchCase="3" class="icon-girl-embarrased"></i>
+                  <i *ngSwitchCase="4" class="icon-hipster-smiling"></i>
+                  <i *ngSwitchCase="5" class="icon-man-with-moustache-smiling"></i>
+                  <i *ngSwitchCase="6" class="icon-smiling-baby"></i>
+                  <i *ngSwitchCase="7" class="icon-smiling-girl"></i>
+                  <i *ngSwitchCase="8" class="icon-naughty-girl"></i>
+                  <i *ngSwitchCase="9" class="icon-philosophizing-boy"></i>
+                  <i *ngSwitchCase="10" class="icon-happy-woman"></i>
                 </div>
               </div>
-          </div>
-          <div #markers class="ec-markers ec-draggable" style="top:114;height:40px;">
-            <div class="ec-ticks">
-              <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-tick" style="top:0px;"
-              [ngStyle]="{ 'left': l.left+'px' , 'height': height - 10+'px'}"><div *ngIf="l.today" style="border-left: 2px solid red" [ngStyle]="{'height': height + 20 +'px'}"></div></div>
             </div>
-            <div class="ec-labels">
-              <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-region-label"
-              [ngStyle]="{ 'left': (l.left + tasckheight / 2)+'px' , 'top' : tikheight+'px'}">{{l?.date}}</div>
-
+            <div #markers class="ec-markers ec-draggable" style="top:114;height:40px;">
+              <div class="ec-ticks">
+                <div *ngFor="let l of t" (window:resize)="getTicks()" class="ec-tick" style="top:0px;" [ngStyle]="{ 'left': l.left+'px' , 'height': height - 10+'px'}">
+                  <div *ngIf="l.today" style="border-left: 2px solid red" [ngStyle]="{'height': height + 20 +'px'}"></div>
+                </div>
+              </div>
+              <div class="ec-labels">
+                <div *ngFor="let l of t" (window:resize)="getTicks()" (click)="weekClick(l.date)" class="ec-region-label" [ngStyle]="{ 'left': (l.left + tasckheight / 2)+'px' , 'top' : tikheight+'px'}">{{l?.date}}</div>
+              </div>
+              <progressbar class="progress" [value]="getMilestonesPer()" [max]="100" style="position: absolute;height: 20px;"
+                [ngStyle]="{'top' : tikheight + 20 +'px' , 'width' : ((weekNumber + 1)  * (40)) + 'px'}"></progressbar>
             </div>
-            <progressbar class="progress" [value]="getMilestonesPer()" [max]="100" style="position: absolute;height: 20px; color: black;"
-            [ngStyle]="{'top' : tikheight + 20 +'px' , 'width' : ((weekNumber + 1)  * (40)) + 'px'}"></progressbar>
           </div>
+          <!--<app-project-bar projectid="{{project?.projectId}}"></app-project-bar>
+          <div class="eventcontrol-target">
+          <div *ngIf="hoverTask">
+            <h1>{{hoverTask.stakholderName}} - {{hoverTask.num}}</h1>
+          </div>
+        </div>-->
         </div>
-        <!--<app-project-bar projectid="{{project?.projectId}}"></app-project-bar>
-        <div class="eventcontrol-target">
-        <div *ngIf="hoverTask">
-          <h1>{{hoverTask.stakholderName}} - {{hoverTask.num}}</h1>
-        </div>
-      </div>-->
       </div>
     </div>
   </div>
-</div>
-
-
-<div *ngIf="selectedTasks" class="row">
-  <div class="col-lg-12">
-    <div class="card">
-      <div class="card-header">
-        <i class="fa fa-align-justify">
-        </i>
-        {{selectedTasks[0].stakeholder.name}} have
-        <b>{{selectedTasks.length}}</b>
-        task in the week #{{selectedTasks[0].week}}
-      </div>
-      <div class="card-body">
-        <table class="table table-sm">
-          <thead>
-            <tr>
-              <th>Task</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let task of selectedTasks">
-              <td>{{task.task.description}}</td>
-              <td>
-                <label class="switch switch-label switch-success">
-                  <input *ngIf="task.status === 1" class="switch-input" type="checkbox" (change)="updateTask(task)">
-                  <input *ngIf="task.status === 2" checked class="switch-input" type="checkbox" (change)="updateTask(task)">
-                  <span *ngIf="!updating"  class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
-                  <i *ngIf="updating" class="fa fa-circle-o-notch fa-lg mt-4 fa-spin"></i>
-                </label>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  
+  
+  <div *ngIf="selectedTasks" class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify">
+          </i>
+          <span *ngIf="!weekClicked">{{selectedTasks[0].stakeholder}} have </span>
+          <b>{{selectedTasks.length}}</b>
+          task in the week #{{selectedTasks[0].week}}
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th *ngIf="weekClicked" (click)="sort('stakeholder')" style="width: 100px">Stakeholder
+                    <span class="fa fa-sort-asc" *ngIf="key == 'stakeholder'" [ngClass]="{'fa-sort-asc':reverse,'fa-sort-desc':!reverse}"></span>
+                <th (click)="sort('task')">Task
+                    <span class="fa fa-sort-asc" *ngIf="key =='task'" [ngClass]="{'fa-sort-asc':reverse,'fa-sort-desc':!reverse}"></span>
+                </th>
+                <th (click)="sort('status')" style="width: 65px">Status
+                    <span class="fa fa-sort-asc" *ngIf="key =='status'" [ngClass]="{'fa-sort-asc':reverse,'fa-sort-desc':!reverse}"></span>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let task of selectedTasks | orderBy: key : reverse">
+                <td *ngIf="weekClicked">{{task.stakeholder}}</td>
+                <td>{{task.task}}</td>
+                <td>
+                  <label class="switch switch-label switch-success">
+                    <input *ngIf="task.status === 1" class="switch-input" type="checkbox" (change)="updateTask(task)">
+                    <input *ngIf="task.status === 2" checked class="switch-input" type="checkbox" (change)="updateTask(task)">
+                    <span *ngIf="!updating" class="switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                    <i *ngIf="updating" class="fa fa-circle-o-notch fa-lg mt-4 fa-spin"></i>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>

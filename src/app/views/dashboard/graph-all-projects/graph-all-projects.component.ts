@@ -36,8 +36,7 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
   private remainingDays;
   private daysPercentag;
   private projectsDone ;
-  private checkBoxValue1;
-  private checkBoxValue2;
+  private checkBoxValue:boolean = true;
 
   constructor(private projectService: ProjectService, private router: Router, private milestonesService: MilestoneService) {
   }
@@ -49,7 +48,9 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
       this.projectsDone=this.getALLProjectPerDone(this.projects).toFixed(2);
       this.remainingDays=this.getremainingDays(this.projects);
       this.openProjects=this.filterOpenProjects(this.projects);
-
+      if(this.checkBoxValue){
+     this.projects= this.getProjectOpened(this.checkBoxValue);
+      }
       this.milestonesService.getMilestones().subscribe(m => {
       this.milestones = m;
         this.timeline = new TimelineGraph(this.graphContainer.nativeElement);
@@ -85,20 +86,31 @@ export class GraphAllProjectsComponent implements AfterViewInit, OnInit {
   
     this.selectedValue="Client Name";
   }
-  checkValue1(event: any){
-    this.checkBoxValue1=event;
+  checkValue(event: any){
+    this.checkBoxValue=!this.checkBoxValue;
   }
-  checkValue2(event: any){
-this.checkBoxValue2=event 
+ 
+
+ getProjectOpened(val:boolean){
+   let openProjects:Project[];
+   openProjects = [];
+   
+   if(val){
+      this.projects.forEach(p=>{
+        if(this.filterOpenProject(p)){
+          openProjects.push(p);
+        }
+      });
+      return openProjects;
+    }
  }
-  getremainingDays(searchResult){ // have to calculate from the last date on the timeline 
+  getremainingDays(searchResult){  
     let endDate=new Date();
     let lastDate;
     searchResult.forEach(project => {
         if(new Date(project.endDate).getTime()> new Date(endDate).getTime()){
             endDate=new Date(project.endDate);
         }
-      //  lastDate =endDate.toLocaleDateString('en-GB');
      
     });
     this.remainingDays=Math.ceil((new Date(endDate).getTime()-new Date().getTime())/(1000*60*60*24));
@@ -192,7 +204,7 @@ this.openProjects=this.filterOpenProjects(this._projectByClient);
       this. drawAfterFilter(this.projects);
       this.projectsDone=this.getALLProjectPerDone(this.projects).toFixed(2);
       this.remainingDays=this.getremainingDays(this.projects);
-      this.openProjects=this.filterOpenProjects(this.projects);
+     this.openProjects=this.filterOpenProjects(this.projects);
 
 
     }
@@ -250,7 +262,7 @@ searchByType( )
 
     } else {
       this._projectByType = this.projects.filter(
-        _project =>{_project.type.toLowerCase().indexOf(this.cname)==0 && this.filterOpenProject(_project)==1} // has the name and the projet status is opened
+        _project =>_project.type.toLowerCase().indexOf(this.cname)==0
       );
     }
     if(this._projectByType.length>=1  ){
@@ -289,7 +301,7 @@ searchByType( )
     }
     return projectStatus;
   }
-  filterOpenProjects(searchResults) {
+ filterOpenProjects(searchResults) {
    
        let taskStatus=0;
        let _date = new Date();
@@ -318,20 +330,7 @@ searchByType( )
        this.openProjectPercentage=this.openProjects/this.projects.length*100;
      return this.openProjects;
       }
-    /* getProjectPerDone(id:number){
-  let countDone:number=0;
-  let countAll:number = 0;
-  let projectPer:Project = this.projects.filter(p=>p.projectId==id)[0];
-  projectPer.taskProjects.forEach(t=>{
-    if(t.status==2){
-      countDone++;
-    }
-    countAll++;
-  });
-  console.log(countAll);
-  console.log("done tasks :"+countDone);
-  console.log("per : %"+((countDone/countAll)*100));
-}*/
+  
 
 getALLProjectPerDone(searchResults){
   let countDone:number=0;

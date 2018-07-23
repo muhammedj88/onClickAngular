@@ -68,6 +68,10 @@ export class CreateProjectComponent implements OnInit, AfterViewInit {
     // alert(this.systems.filter(s => s.checked).length);
     this.creating = true;
     this.projectService.addProject(project as Project)
-       .subscribe(p => { this.router.navigate([ '/onclick/project/' + p.projectId]); });
+       .subscribe(p => { this.router.navigate([ '/onclick/project/' + p.projectId]); },
+                  err => {
+                    alert('Error Exception!');
+                    this.router.navigate([ '/500']);
+                  });
   }
 }

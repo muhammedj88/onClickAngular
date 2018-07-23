@@ -10,6 +10,8 @@ import { AllProjectsComponent } from './all-projects/all-projects.component';
 
 import { OnClickRoutingModule } from './on-click-routing.module';
 import { ProjectBarComponent } from './project-bar/project-bar.component';
+import { Ng2OrderModule } from 'ng2-order-pipe';
+
 
 @NgModule({
   imports: [
@@ -17,7 +19,8 @@ import { ProjectBarComponent } from './project-bar/project-bar.component';
     HttpClientModule,
     OnClickRoutingModule,
     ProgressbarModule.forRoot(),
-    PopoverModule.forRoot()
+    PopoverModule.forRoot(),
+     Ng2OrderModule
   ],
   declarations: [
     CreateProjectComponent,
